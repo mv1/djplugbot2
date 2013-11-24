@@ -698,6 +698,7 @@ botMethods.djAdvanceEvent = function(data){
                             setTimeout(function(){ mubBot.misc.ready = true; }, mubBot.settings.cooldown * 1000);
                         }
                         break;
+                        
                     case "hug":
                         if(typeof command[1] == "@"){
                             var crowd = API.getUsers();
@@ -748,6 +749,7 @@ botMethods.djAdvanceEvent = function(data){
                             setTimeout(function(){ mubBot.misc.ready = true; }, mubBot.settings.cooldown * 1000);
                         }
                         break;
+                        
                     case "reward":
                     case "cookie":
                         if(typeof command[1] == "@"){
@@ -791,7 +793,35 @@ botMethods.djAdvanceEvent = function(data){
                             setTimeout(function(){ mubBot.misc.ready = true; }, mubBot.settings.cooldown * 1000);
                         }
                         break;
- 
+                    
+                    case "prop":
+                        if(typeof command[1] == "@"){
+                            var crowd = API.getUsers();
+                            var randomUser = Math.floor(Math.random() * crowd.length);
+                            var randomSentence = Math.floor(Math.random() * 3);
+                            switch(randomSentence){
+                                case 0:
+                                    API.sendChat("@"+data.from+" just gave props to @"+crowd[randomUser].username+" for playing a dope track");
+                                    break;
+                                case 1:
+                                    API.sendChat("@"+data.from+" just gave props to @"+crowd[randomUser].username+" for playing a dope track");
+                                    break;
+                                case 2:
+                                    API.sendChat("@"+data.from+" just gave props to @"+crowd[randomUser].username+" for playing a dope track");
+                                    break;
+                                case 3:
+                                    API.sendChat("@"+data.from+" just gave props to @"+crowd[randomUser].username+" for playing a dope track");
+                                    break;
+                            }
+                        }
+                        if(mubBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                            mubBot.misc.ready = false;
+                            setTimeout(function(){ mubBot.misc.ready = true; }, mubBot.settings.cooldown * 1000);
+                        }
+                        break;
+                    
+                    
+                    
                     case "run":
                         if(mubBot.admins.indexOf(fromID) > -1){
                             a = botMethods.cleanString(command[1]);
