@@ -107,8 +107,8 @@ mubBot.misc.ready = true;
 mubBot.misc.lockSkipping = false;
 mubBot.misc.lockSkipped = "0";
 mubBot.misc.tacos = new Array();
-mubBot.misc.commands = " !songlink, !linkify, !source, !rules, !theme, !creator, !download, !taco, !hug, !cookie, !reward, !wiki, !maxlength, !commands,";
-mubBot.misc.modcommands = " !test, !status, !skip, !cancel, !save, !changelog, !trvf, !thf, !maxlength, !cooldown";
+mubBot.misc.commands = " !songlink, !linkify, !source, !rules, !theme, !creator, !download, !taco, !hug, !cookie, !reward, !wiki, !maxlength, !commands";
+mubBot.misc.modcommands = ", !bansong 1, !test, !status, !skip, !cancel, !save, !changelog, !trvf, !thf, !maxlength, !cooldown";
 mubBot.misc.admincommands =", !tsf, !trf, !tbf";
  
  
@@ -840,15 +840,15 @@ botMethods.djAdvanceEvent = function(data){
         }
         if(API.getUser(data.fromID).permission > 1){
             switch(command[0]){
-                case 'ruleskip':
+                case 'bansong':
                     if(command[1].length === 13 && command[1].indexOf(':') === 1 && command[1].indexOf(1) === 0){
                         ruleSkip[command[1]] = {id: command[1], rule: command[2]};
                         $.getJSON("http://gdata.youtube.com/feeds/api/videos/"+command[1].substring(2)+"?v=2&alt=jsonc&callback=?", function(json){
                             setTimeout(function(){
                                 if(typeof json.data.title !== 'undefined'){
-                                    API.sendChat(json.data.title+' added to ruleskip');
+                                    API.sendChat(json.data.title+' Is now banned!');
                                 }else{
-                                    API.sendChat('Added to ruleskip');
+                                    API.sendChat('Added to Banned Songs');
                                 }
                             }, 500)
                         });
@@ -856,38 +856,38 @@ botMethods.djAdvanceEvent = function(data){
                         ruleSkip[command[1]] = {id: command[1], rule: command[2]};
                         SC.get('/tracks', {ids: command[1].substring(2)}, function(tracks) {
                             if(typeof tracks[0].title !== 'undefined'){
-                                API.sendChat(tracks[0].title+' added to ruleskip');
+                                API.sendChat(tracks[0].title+' Is now banned!');
                             }else{
-                                API.sendChat('Added to ruleskip');
+                                API.sendChat('Added to Banned Songs');
                             }
                         });
                     }else if(typeof ruleSkip[API.getMedia().id] === 'undefined'){
                     ruleSkip[API.getMedia().id] = {id: API.getMedia().id, rule: command[1]};
-                    API.sendChat(API.getMedia().author+ ' - ' +API.getMedia().title+' added to ruleskip');
+                    API.sendChat(API.getMedia().author+ ' - ' +API.getMedia().title+' added to Banned Song!');
                     API.moderateForceSkip();
                 }
                     botMethods.save();
                     break;
-                case 'checkruleskip':
+                case 'checkbansong':
                     if(typeof command[1] !== 'undefined'){
-                        if(typeof ruleSkip[command[1]] !== 'undefined') API.sendChat(command[1]+' is in the ruleskip array!');
+                        if(typeof ruleSkip[command[1]] !== 'undefined') API.sendChat(command[1]+' is in the Banned song array!');
                         else API.sendChat(command[1]+' is not in the ruleskip array!');
                     }else{
-                        if(typeof ruleSkip[API.getMedia().id] !== 'undefined') API.sendChat(API.getMedia().id+' is in the ruleskip array')
-                        else API.sendChat(API.getMedia().id+' is not in the ruleskip array');
+                        if(typeof ruleSkip[API.getMedia().id] !== 'undefined') API.sendChat(API.getMedia().id+' is in the Banned song array')
+                        else API.sendChat(API.getMedia().id+' is not in the Banned song array');
                     }
                     break;
-                case 'ruleskipdelete':
+                case 'songbandelete':
                     if(typeof command[1] !== 'undefined' && typeof ruleSkip[command[1]] !== 'undefined'){
                         delete ruleSkip[command[1]];
                         API.sendChat(command[1]+' removed from ruleskip');
                     }else if(typeof command[1] === 'undefined' && typeof ruleSkip[API.getMedia().id] !== 'undefined'){
                         delete ruleSkip[API.getMedia().id];
-                        API.sendChat(API.getMedia().id+' removed from ruleskip');
+                        API.sendChat(API.getMedia().id+' removed from Banned song');
                     }else if(typeof command[1] !== 'undefined'){
-                        API.sendChat(command[1]+' was not in the ruleskip array!');
+                        API.sendChat(command[1]+' was not in the Banned song array!');
                     }else{
-                        API.sendChat(API.getMedia().id+' was not in the ruleskip array!');
+                        API.sendChat(API.getMedia().id+' was not in the Banned song array!');
                     }
                     botMethods.save()
                 break;
@@ -949,23 +949,7 @@ botMethods.djAdvanceEvent = function(data){
         if(mubBot.settings.ruleSkip && typeof ruleSkip[data.media.id] != "undefined"){
             switch(ruleSkip[data.media.id].rule){
                 case '1':
-                    API.sendChat('@'+data.dj.username+' Only Brony/My Little Pony related music and PMV’s can be played in this room');
-                    botMethods.skip();
-                    break;
-                case '2':
-                    API.sendChat('@'+data.dj.username+' All non-pony PMV’s are subject to being skipped if they are just pictures or simple loops');
-                    botMethods.skip();
-                    break;
-                case '3':
-                    API.sendChat('@'+data.dj.username+' Mashups/mixes/loops with little to no effort are subject to being skipped');
-                    botMethods.skip();
-                    break;
-                case '13':
-                    API.sendChat('@'+data.dj.username+' No R34/clop/porn/gore. This includes links, songs, and chat. (If you want to post this stuff anywhere, talk to a moderator about being added to the Skype group, you can post it there with proper tags [NSFW/NSFL])');
-                    botMethods.skip();
-                    break;
-                case '14':
-                    API.sendChat('@'+data.dj.username+' No playing episodes/non-music shorts unless you’re the (co)host or were giving permission to play a episode/non-music short by a (co)host');
+                    API.sendChat('@'+data.dj.username+' sorry this song was banned');
                     botMethods.skip();
                     break;
                 case '99':
