@@ -267,21 +267,6 @@ botMethods.djAdvanceEvent = function(data){
                             setTimeout(function(){ mubBot.misc.ready = true; }, mubBot.settings.cooldown * 1000);
                         }
                         break;
-                    case "stream":
-                    case "twitch":
-                        if(typeof command[1] == "undefined"){
-                            API.sendChat("Visit - http://www.twitch.tv/schyzz");
-                        }else if(command[1].indexOf("@") > -1){
-                            API.sendChat(command[1]+" Visit - http://www.twitch.tv/schyzz");
-                        }else{
-                            API.sendChat("Visit - http://www.twitch.tv/schyzz");
-                        }
-                        if(mubBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                            mubBot.misc.ready = false;
-                            setTimeout(function(){ mubBot.misc.ready = true; }, mubBot.settings.cooldown * 1000);
-                        }
-                        break;
- 
                     case "rules":
                         if(typeof command[1] == "undefined"){
                             API.sendChat("Rules: 1) Play mostly hip hop. 2) Avoid mainstream hip hop. 3) Trolls well be force to be booted.");
