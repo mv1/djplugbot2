@@ -107,9 +107,9 @@ mubBot.misc.ready = true;
 mubBot.misc.lockSkipping = false;
 mubBot.misc.lockSkipped = "0";
 mubBot.misc.tacos = new Array();
-mubBot.misc.commands = " .songlink, .linkify, .source, .rules, .theme, .creator, .download, .taco, .hug, .cookie, .reward, .wiki, .maxlength, .commands,";
-mubBot.misc.modcommands = " .test, .status, .skip, .cancel, .save, .changelog, .trvf, .thf, .maxlength, .cooldown";
-mubBot.misc.admincommands =", .tsf, .trf, .tbf";
+mubBot.misc.commands = " !songlink, !linkify, !source, !rules, !theme, !creator, !download, !taco, !hug, !cookie, !reward, !wiki, !maxlength, !commands,";
+mubBot.misc.modcommands = " !test, !status, !skip, !cancel, !save, !changelog, !trvf, !thf, !maxlength, !cooldown";
+mubBot.misc.admincommands =", !tsf, !trf, !tbf";
  
  
 joined = new Date().getTime();
@@ -250,7 +250,7 @@ botMethods.djAdvanceEvent = function(data){
 };
  
     API.on(API.CHAT, function(data){
-        if(data.message.indexOf('.') === 0){
+        if(data.message.indexOf('!') === 0){
             var msg = data.message, from = data.from, fromID = data.fromID;
             var command = msg.substring(1).split(' ');
             if(typeof command[2] != "undefined"){
@@ -393,7 +393,7 @@ botMethods.djAdvanceEvent = function(data){
                         break;
  
                    case "source":
-                        API.sendChat("http://goo.gl/hjkq1J");
+                        API.sendChat("http://goo.gl/VjPC3N");
                         if(mubBot.admins.indexOf(fromID) == -1){
                             mubBot.misc.ready = false;
                             setTimeout(function(){ mubBot.misc.ready = true; }, mubBot.settings.cooldown * 1000);
@@ -406,7 +406,7 @@ botMethods.djAdvanceEvent = function(data){
     });
  
     API.on(API.CHAT, function(data){
-        if(data.message.indexOf('.') === 0){
+        if(data.message.indexOf('!') === 0){
             var msg = data.message, from = data.from, fromID = data.fromID;
             var command = msg.substring(1).split(' ');
             if(typeof command[2] != "undefined"){
