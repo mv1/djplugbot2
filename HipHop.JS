@@ -401,6 +401,14 @@ botMethods.djAdvanceEvent = function(data){
             }
             if(mubBot.misc.ready || mubBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
                 switch(command[0].toLowerCase()){
+                
+                    case "say":
+                    if(API.getUser(fromID).permission > 1 || mubBot.admins.indexOf(fromID) > -1){
+                        if(typeof command[1] === " "){
+                            }else{
+                            API.sendChat(command[1]);
+                        }
+                    }
                    
                     case "skip":
                         if(API.getUser(data.fromID).permission > 1){
