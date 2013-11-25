@@ -775,16 +775,59 @@ botMethods.djAdvanceEvent = function(data){
                             var randomSentence = Math.floor(Math.random() * 3);
                             switch(randomSentence){
                                 case 0:
-                                    API.sendChat("@"+botMethods.cleanString(command[1])+", "+ data.from +"with a cupcake");
+                                    API.sendChat("@"+botMethods.cleanString(command[1])+", @"+ data.from +" Has rewarded you with a cupcake");
                                     break;
                                 case 1:
-                                    API.sendChat("@"+botMethods.cleanString(command[1])+", "+ data.from +"with a brownie");
+                                    API.sendChat("@"+botMethods.cleanString(command[1])+", @"+ data.from +" Has rewarded you with a brownie");
                                     break;
                                 case 2:
-                                    API.sendChat("@"+botMethods.cleanString(command[1])+", "+ data.from +"with a beer");
+                                    API.sendChat("@"+botMethods.cleanString(command[1])+", @"+ data.from +" Has rewarded you with a beer");
                                     break;
                                 case 3:
-                                    API.sendChat("@"+botMethods.cleanString(command[1])+", "+ data.from +"with a cookie");
+                                    API.sendChat("@"+botMethods.cleanString(command[1])+", @"+ data.from +" Has rewarded you with a cookie");
+                                    break;
+                            }
+                        }
+                        if(mubBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
+                            mubBot.misc.ready = false;
+                            setTimeout(function(){ mubBot.misc.ready = true; }, mubBot.settings.cooldown * 1000);
+                        }
+                        break;
+                        
+                    case "prop":
+                        if(typeof command[1] == "@"){
+                            var crowd = API.getUsers();
+                            var randomUser = Math.floor(Math.random() * crowd.length);
+                            var randomSentence = Math.floor(Math.random() * 3);
+                            switch(randomSentence){
+                                case 0:
+                                    API.sendChat("/me @"+ data.from +" just gave props to @"+botMethods.cleanString(command[1])+" for playing a dope track!");
+                                    break;
+                                case 1:
+                                    API.sendChat("/me @"+ data.from +" just gave props to @"+botMethods.cleanString(command[1])+" for playing a dope track!");
+                                    break;
+                                case 2:
+                                    API.sendChat("/me @"+ data.from +" just gave props to @"+botMethods.cleanString(command[1])+" for playing a dope track!");
+                                    break;
+                                case 3:
+                                    API.sendChat("/me @"+ data.from +" just gave props to @"+botMethods.cleanString(command[1])+" for playing a dope track!");
+                                    break;
+                            }
+                        }else{
+                            if(command[1].indexOf("@") === 0) command[1] = command[1].substring(1);
+                            var randomSentence = Math.floor(Math.random() * 3);
+                            switch(randomSentence){
+                                case 0:
+                                    API.sendChat("/me @"+ data.from +" just gave props to @"+botMethods.cleanString(command[1])+" for playing a dope track!");
+                                    break;
+                                case 1:
+                                    API.sendChat("/me @"+ data.from +" just gave props to @"+botMethods.cleanString(command[1])+" for playing a dope track!");
+                                    break;
+                                case 2:
+                                    API.sendChat("/me @"+ data.from +" just gave props to @"+botMethods.cleanString(command[1])+" for playing a dope track!");
+                                    break;
+                                case 3:
+                                    API.sendChat("/me @"+ data.from +" just gave props to @"+botMethods.cleanString(command[1])+" for playing a dope track!");
                                     break;
                             }
                         }
