@@ -37,6 +37,8 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMAN
 - Limits songs length
 - Ban songs (If Overplayed)
 - Helps put up link
+- Announces who Grab song
+- Greets the Joiners
 
 
 More futures will be made.
