@@ -106,6 +106,8 @@ mubBot.misc.ready = true;
 mubBot.misc.lockSkipping = false;
 mubBot.misc.lockSkipped = "0";
 mubBot.misc.tacos = new Array();
+mubBot.misc.tacos = ["blunt","cush","Chemo","Locoweed","marijuana","Ganja"];
+mubBot.misc.cookie = ["a chocolate chip cookie", "a sugar cookie", "an oatmeal raisin cookie", "a 'special' brownie", "an animal cracker", "a scooby snack", "a blueberry muffin", "a cupcake"];
 mubBot.misc.commands = " !songlink, !linkify, !source, !rules, !theme, !creator, !download, !prop, !weed, !hug, !cookie, !reward, !wiki, !maxlength, !commands";
 mubBot.misc.modcommands = " !test, !status, !skip, !bansong 1, !cancel, !save, !changelog, !trvf, !thf, !maxlength, !cooldown";
 mubBot.misc.admincommands =", !tsf, !trf, !tbf";
@@ -758,16 +760,7 @@ botMethods.djAdvanceEvent = function(data){
                             var randomSentence = Math.floor(Math.random() * 3);
                             switch(randomSentence){
                                 case 0:
-                                    API.sendChat("@"+crowd[randomUser].username+", @"+ data.from +" Give you a cupcake");
-                                    break;
-                                case 1:
-                                    API.sendChat("@"+crowd[randomUser].username+", @"+ data.from +" Give you a brownie");
-                                    break;
-                                case 2:
-                                    API.sendChat("@"+crowd[randomUser].username+", @"+ data.from +" Give you a beer");
-                                    break;
-                                case 3:
-                                    API.sendChat("@"+crowd[randomUser].username+", @"+ data.from +" Give you a cookie");
+                                    API.sendChat("@" +botMethods.cleanString(command[1])+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie);
                                     break;
                             }
                         }else{
@@ -775,16 +768,7 @@ botMethods.djAdvanceEvent = function(data){
                             var randomSentence = Math.floor(Math.random() * 3);
                             switch(randomSentence){
                                 case 0:
-                                    API.sendChat("@"+botMethods.cleanString(command[1])+", @"+ data.from +" Has rewarded you with a cupcake");
-                                    break;
-                                case 1:
-                                    API.sendChat("@"+botMethods.cleanString(command[1])+", @"+ data.from +" Has rewarded you with a brownie");
-                                    break;
-                                case 2:
-                                    API.sendChat("@"+botMethods.cleanString(command[1])+", @"+ data.from +" Has rewarded you with a beer");
-                                    break;
-                                case 3:
-                                    API.sendChat("@"+botMethods.cleanString(command[1])+", @"+ data.from +" Has rewarded you with a cookie");
+                                    API.sendChat("@" +botMethods.cleanString(command[1])+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie);
                                     break;
                             }
                         }
