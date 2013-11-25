@@ -172,15 +172,6 @@ botMethods.skip = function(){
  
 
  
-botMethods.save = function(){localStorage.setItem("mubBotSave", JSON.stringify(toSave))};
- 
-botMethods.loadStorage = function(){
-    if(localStorage.getItem("mubBotSave") !== null){
-        botMethods.load();
-    }else{
-        botMethods.save();
-    }
-};
  
 botMethods.checkHistory = function(){
     currentlyPlaying = API.getMedia(), history = API.getHistory();
