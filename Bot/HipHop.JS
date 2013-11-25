@@ -454,24 +454,24 @@ botMethods.djAdvanceEvent = function(data){
  
                     case "swearfilter":
                     case "sf":
-                        if(mubBot.admins.indexOf(fromID) > -1) mubBot.settings.swearFilter ? API.sendChat("Swearing filter is enabled") : API.sendChat("Swearing filter is disabled");
+                        if(API.getUser(fromID).permission > 1 || mubBot.admins.indexOf(fromID) > -1) mubBot.settings.swearFilter ? API.sendChat("Swearing filter is enabled") : API.sendChat("Swearing filter is disabled");
                         botMethods.save();
                         break;
  
                     case "racismfilter":
                     case "rf":
-                        if(mubBot.admins.indexOf(fromID) > -1) mubBot.settings.racismFilter ? API.sendChat("Racism filter is enabled") : API.sendChat("Racism filter is disabled");
+                        if(API.getUser(fromID).permission > 1 || mubBot.admins.indexOf(fromID) > -1) mubBot.settings.racismFilter ? API.sendChat("Racism filter is enabled") : API.sendChat("Racism filter is disabled");
                         botMethods.save();
                         break;
  
                     case "beggerfilter":
                     case "bf":
-                        if(mubBot.admins.indexOf(fromID) > -1) mubBot.settings.beggerFilter ? API.sendChat("Begger filter is enabled") : API.sendChat("Begger filter is disabled");
+                        if(API.getUser(fromID).permission > 1 || mubBot.admins.indexOf(fromID) > -1) mubBot.settings.beggerFilter ? API.sendChat("Begger filter is enabled") : API.sendChat("Begger filter is disabled");
                         botMethods.save();
                         break;
  
                     case "tsf":
-                        if(mubBot.admins.indexOf(fromID) > -1){
+                        if(API.getUser(fromID).permission > 1 || mubBot.admins.indexOf(fromID) > -1){
                             if(mubBot.settings.swearFilter){
                                 mubBot.settings.swearFilter = false;
                                 API.sendChat("Bot will no longer filter swearing.");
