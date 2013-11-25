@@ -107,6 +107,7 @@ mubBot.misc.lockSkipping = false;
 mubBot.misc.lockSkipped = "0";
 mubBot.misc.tacos = new Array();
 mubBot.misc.tacos = ["blunt","cush","Chemo","Locoweed","marijuana","Ganja"];
+mubBot.misc.cookie = new Array();
 mubBot.misc.cookie = ["a chocolate chip cookie", "a sugar cookie", "an oatmeal raisin cookie", "a 'special' brownie", "an animal cracker", "a scooby snack", "a blueberry muffin", "a cupcake"];
 mubBot.misc.commands = " !songlink, !linkify, !source, !rules, !theme, !creator, !download, !prop, !weed, !hug, !cookie, !reward, !wiki, !maxlength, !commands";
 mubBot.misc.modcommands = " !test, !status, !skip, !bansong 1, !cancel, !save, !changelog, !trvf, !thf, !maxlength, !cooldown";
@@ -655,7 +656,7 @@ botMethods.djAdvanceEvent = function(data){
             }
             if(mubBot.misc.ready || mubBot.admins.indexOf(fromID) > -1 ||API.getUser(fromID).permission > 1){
                 switch(command[0].toLowerCase()){
-                    case "weed":
+                   case "weed":
                         if(typeof command[1] == "@"){
                             var crowd = API.getUsers();
                             var randomUser = Math.floor(Math.random() * crowd.length);
@@ -757,6 +758,7 @@ botMethods.djAdvanceEvent = function(data){
                         if(typeof command[1] == "@"){
                             var crowd = API.getUsers();
                             var randomUser = Math.floor(Math.random() * crowd.length);
+                            var randomTaco = Math.floor(Math.random() * mubBot.misc.tacos.length);
                             var randomSentence = Math.floor(Math.random() * 3);
                             switch(randomSentence){
                                 case 0:
