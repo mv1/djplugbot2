@@ -760,7 +760,16 @@ botMethods.djAdvanceEvent = function(data){
                             var randomSentence = Math.floor(Math.random() * 3);
                             switch(randomSentence){
                                 case 0:
-                                    API.sendChat("@" +botMethods.cleanString(command[1])+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie);
+                                    API.sendChat("@" +crowd[randomUser].username+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie);
+                                    break;
+                                case 1:
+                                    API.sendChat("@" +crowd[randomUser].username+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie);
+                                    break;
+                                case 2:
+                                    API.sendChat("@" +crowd[randomUser].username+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie);
+                                    break;
+                                case 3:
+                                    API.sendChat("@" +crowd[randomUser].username+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie);
                                     break;
                             }
                         }else{
@@ -768,6 +777,15 @@ botMethods.djAdvanceEvent = function(data){
                             var randomSentence = Math.floor(Math.random() * 3);
                             switch(randomSentence){
                                 case 0:
+                                    API.sendChat("@" +botMethods.cleanString(command[1])+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie);
+                                    break;
+                                case 1:
+                                    API.sendChat("@" +botMethods.cleanString(command[1])+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie);
+                                    break;
+                                case 2:
+                                    API.sendChat("@" +botMethods.cleanString(command[1])+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie);
+                                    break;
+                                case 3:
                                     API.sendChat("@" +botMethods.cleanString(command[1])+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie);
                                     break;
                             }
