@@ -7,6 +7,9 @@ Copyright © 2012-2013 by DJ NEON & MV1.
 
 Reports will be made if unauthorized Users ARE USING THIS SCRIPT! (Thanks SchyzzSocket)
 
+  [Lobby: Hypixel || Official Hypixel Room
+  [Host: killer5252
+
 
 
 THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHORS DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE
