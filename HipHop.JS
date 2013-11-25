@@ -95,8 +95,7 @@ mubBot.filters = {};
 botMethods = {};
 mubBot.pubVars = {};
  
-toSave = {};
-toSave.settings = mubBot.settings;
+
 toSave.moderators = mubBot.moderators;
 toSave.ruleSkip = ruleSkip;
  
