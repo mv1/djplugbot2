@@ -749,6 +749,7 @@ botMethods.djAdvanceEvent = function(data){
                         }
                         break;
                         
+                       
                     case "reward":
                     case "cookie":
                         if(typeof command[1] == "@"){
@@ -757,33 +758,16 @@ botMethods.djAdvanceEvent = function(data){
                             var randomSentence = Math.floor(Math.random() * 3);
                             switch(randomSentence){
                                 case 0:
-                                    API.sendChat("@"+crowd[randomUser].username+", @"+data.from+" Give you a cupcake");
+                                    API.sendChat("@"+crowd[randomUser].username+", @"+ this.msgData.from +" Give you a cupcake");
                                     break;
                                 case 1:
-                                    API.sendChat("@"+crowd[randomUser].username+", @"+data.from+" Give you a brownie");
+                                    API.sendChat("@"+crowd[randomUser].username+", @"+ this.msgData.from +" Give you a brownie");
                                     break;
                                 case 2:
-                                    API.sendChat("@"+crowd[randomUser].username+", @"+data.from+" Give you a beer");
+                                    API.sendChat("@"+crowd[randomUser].username+", @"+ this.msgData.from +" Give you a beer");
                                     break;
                                 case 3:
-                                    API.sendChat("@"+crowd[randomUser].username+", @"+data.from+" Give you a cookie");
-                                    break;
-                            }
-                        }else{
-                            if(command[1].indexOf("@") === 0) command[1] = command[1].substring(1);
-                            var randomSentence = Math.floor(Math.random() * 3);
-                            switch(randomSentence){
-                                case 0:
-                                    API.sendChat("/me Rewards @"+botMethods.cleanString(command[1])+" With a cupcake");
-                                    break;
-                                case 1:
-                                    API.sendChat("/me Rewards @"+botMethods.cleanString(command[1])+" with a brownie");
-                                    break;
-                                case 2:
-                                    API.sendChat("/me Rewards @"+botMethods.cleanString(command[1])+" with a beer");
-                                    break;
-                                case 3:
-                                    API.sendChat("/me Rewards @"+botMethods.cleanString(command[1])+" with a cookie");
+                                    API.sendChat("@"+crowd[randomUser].username+", @"+ this.msgData.from +" Give you a cookie");
                                     break;
                             }
                         }
@@ -792,50 +776,6 @@ botMethods.djAdvanceEvent = function(data){
                             setTimeout(function(){ mubBot.misc.ready = true; }, mubBot.settings.cooldown * 1000);
                         }
                         break;
-                    
-                    case "prop":
-                        if(typeof command[1] == "@"){
-                            var crowd = API.getUsers();
-                            var randomUser = Math.floor(Math.random() * crowd.length);
-                            var randomSentence = Math.floor(Math.random() * 3);
-                            switch(randomSentence){
-                                case 0:
-                                    API.sendChat("@"+data.from+" just gave props to @"+crowd[randomUser].username+" for playing a dope track");
-                                    break;
-                                case 1:
-                                    API.sendChat("@"+data.from+" just gave props to @"+crowd[randomUser].username+" for playing a dope track");
-                                    break;
-                                case 2:
-                                    API.sendChat("@"+data.from+" just gave props to @"+crowd[randomUser].username+" for playing a dope track");
-                                    break;
-                                case 3:
-                                    API.sendChat("@"+data.from+" just gave props to @"+crowd[randomUser].username+" for playing a dope track");
-                                    break;
-                            }
-                        }else{
-                            if(command[1].indexOf("@") === 0) command[1] = command[1].substring(1);
-                            var randomSentence = Math.floor(Math.random() * 3);
-                            switch(randomSentence){
-                                case 0:
-                                    API.sendChat("@"+data.from+" just gave props to @"+crowd[randomUser].username+" for playing a dope track");
-                                    break;
-                                case 1:
-                                    API.sendChat("@"+data.from+" just gave props to @"+crowd[randomUser].username+" for playing a dope track");
-                                    break;
-                                case 2:
-                                    API.sendChat("@"+data.from+" just gave props to @"+crowd[randomUser].username+" for playing a dope track");
-                                    break;
-                                case 3:
-                                    API.sendChat("@"+data.from+" just gave props to @"+crowd[randomUser].username+" for playing a dope track");
-                                    break;
-                            }
-                        }
-                        if(mubBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                            mubBot.misc.ready = false;
-                            setTimeout(function(){ mubBot.misc.ready = true; }, mubBot.settings.cooldown * 1000);
-                        }
-                        break;
-                    
                     
                     
                     case "run":
