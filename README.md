@@ -1,4 +1,4 @@
-djplugbot2
+HipHop-TT Bot
 ==========
 A bot script for: http://plug.dj/hip-hop-tt/
 
