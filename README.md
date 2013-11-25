@@ -5,7 +5,7 @@ A bot script for: http://plug.dj/hip-hop-tt/
 Copyright © 2012-2013 by DJ NEON & MV1.
 
 
-- Reports will be made if unauthorized Users ARE USING THIS SCRIPT! (Thanks SchyzzSocket)
+° Reports will be made if unauthorized Users ARE USING THIS SCRIPT! (Thanks SchyzzSocket) °
 
 
 THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHORS DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE
