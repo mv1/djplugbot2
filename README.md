@@ -9,7 +9,7 @@ Reports will be made if unauthorized Users ARE USING THIS SCRIPT! (Thanks Schyzz
 
   [Lobby: Hypixel || Official Hypixel Room
   
-  [Host: killer5252
+[Host: killer5252
 
 
 
