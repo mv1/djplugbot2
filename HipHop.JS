@@ -758,16 +758,33 @@ botMethods.djAdvanceEvent = function(data){
                             var randomSentence = Math.floor(Math.random() * 3);
                             switch(randomSentence){
                                 case 0:
-                                    API.sendChat("@"+crowd[randomUser].username+", @"+ msgData.from +" Give you a cupcake");
+                                    API.sendChat("@"+crowd[randomUser].username+", @"+ data.from +" Give you a cupcake");
                                     break;
                                 case 1:
-                                    API.sendChat("@"+crowd[randomUser].username+", @"+ msgData.from +" Give you a brownie");
+                                    API.sendChat("@"+crowd[randomUser].username+", @"+ data.from +" Give you a brownie");
                                     break;
                                 case 2:
-                                    API.sendChat("@"+crowd[randomUser].username+", @"+ msgData.from +" Give you a beer");
+                                    API.sendChat("@"+crowd[randomUser].username+", @"+ data.from +" Give you a beer");
                                     break;
                                 case 3:
-                                    API.sendChat("@"+crowd[randomUser].username+", @"+ msgData.from +" Give you a cookie");
+                                    API.sendChat("@"+crowd[randomUser].username+", @"+ data.from +" Give you a cookie");
+                                    break;
+                            }
+                        }else{
+                            if(command[1].indexOf("@") === 0) command[1] = command[1].substring(1);
+                            var randomSentence = Math.floor(Math.random() * 3);
+                            switch(randomSentence){
+                                case 0:
+                                    API.sendChat("@"+botMethods.cleanString(command[1])+", "+ data.from +"with a cupcake");
+                                    break;
+                                case 1:
+                                    API.sendChat("@"+botMethods.cleanString(command[1])+", "+ data.from +"with a brownie");
+                                    break;
+                                case 2:
+                                    API.sendChat("@"+botMethods.cleanString(command[1])+", "+ data.from +"with a beer");
+                                    break;
+                                case 3:
+                                    API.sendChat("@"+botMethods.cleanString(command[1])+", "+ data.from +"with a cookie");
                                     break;
                             }
                         }
