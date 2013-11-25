@@ -95,7 +95,7 @@ mubBot.filters = {};
 botMethods = {};
 mubBot.pubVars = {};
  
-
+toSave = {};
 toSave.moderators = mubBot.moderators;
 toSave.ruleSkip = ruleSkip;
  
@@ -107,7 +107,7 @@ mubBot.misc.lockSkipping = false;
 mubBot.misc.lockSkipped = "0";
 mubBot.misc.tacos = new Array();
 mubBot.misc.commands = " !songlink, !linkify, !source, !rules, !theme, !creator, !download, !weed, !hug, !cookie, !reward, !wiki, !maxlength, !commands";
-mubBot.misc.modcommands = "  !test, !status, !skip, !cancel, !save, !changelog, !bansong 1, !trvf, !thf, !maxlength, !cooldown";
+mubBot.misc.modcommands = " !bansong 1, !test, !status, !skip, !cancel, !save, !changelog, !trvf, !thf, !maxlength, !cooldown";
 mubBot.misc.admincommands =", !tsf, !trf, !tbf";
  
  
@@ -170,8 +170,21 @@ botMethods.skip = function(){
     }, 3500);
 };
  
-
+botMethods.load = function(){
+    toSave = JSON.parse(localStorage.getItem("mubBotSave"));
+    mubBot.settings = toSave.settings;
+    ruleSkip = toSave.ruleSkip;
+};
  
+botMethods.save = function(){localStorage.setItem("mubBotSave", JSON.stringify(toSave))};
+ 
+botMethods.loadStorage = function(){
+    if(localStorage.getItem("mubBotSave") !== null){
+        botMethods.load();
+    }else{
+        botMethods.save();
+    }
+};
  
 botMethods.checkHistory = function(){
     currentlyPlaying = API.getMedia(), history = API.getHistory();
