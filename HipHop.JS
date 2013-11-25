@@ -794,9 +794,26 @@ botMethods.djAdvanceEvent = function(data){
                         break;
                     
                     case "prop":
-                        if(typeof command[1].indexOf("@") === 0){
+                        if(typeof command[1] == "@"){
                             var crowd = API.getUsers();
                             var randomUser = Math.floor(Math.random() * crowd.length);
+                            var randomSentence = Math.floor(Math.random() * 3);
+                            switch(randomSentence){
+                                case 0:
+                                    API.sendChat("@"+data.from+" just gave props to @"+crowd[randomUser].username+" for playing a dope track");
+                                    break;
+                                case 1:
+                                    API.sendChat("@"+data.from+" just gave props to @"+crowd[randomUser].username+" for playing a dope track");
+                                    break;
+                                case 2:
+                                    API.sendChat("@"+data.from+" just gave props to @"+crowd[randomUser].username+" for playing a dope track");
+                                    break;
+                                case 3:
+                                    API.sendChat("@"+data.from+" just gave props to @"+crowd[randomUser].username+" for playing a dope track");
+                                    break;
+                            }
+                        }else{
+                            if(command[1].indexOf("@") === 0) command[1] = command[1].substring(1);
                             var randomSentence = Math.floor(Math.random() * 3);
                             switch(randomSentence){
                                 case 0:
