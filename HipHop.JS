@@ -794,7 +794,7 @@ botMethods.djAdvanceEvent = function(data){
                         break;
                     
                     case "prop":
-                        if(typeof command[1] == "@"){
+                        if(typeof command[1].indexOf("@") === 0){
                             var crowd = API.getUsers();
                             var randomUser = Math.floor(Math.random() * crowd.length);
                             var randomSentence = Math.floor(Math.random() * 3);
