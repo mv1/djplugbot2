@@ -39,6 +39,7 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMAN
 - Helps put up link
 - Announces who Grab song
 - Greets the Joiners
+- Automatically woots (if script is function)
 
 
 More futures will be made.
