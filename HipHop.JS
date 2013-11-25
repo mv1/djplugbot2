@@ -170,11 +170,7 @@ botMethods.skip = function(){
     }, 3500);
 };
  
-botMethods.load = function(){
-    toSave = JSON.parse(localStorage.getItem("mubBotSave"));
-    mubBot.settings = toSave.settings;
-    ruleSkip = toSave.ruleSkip;
-};
+
  
 botMethods.save = function(){localStorage.setItem("mubBotSave", JSON.stringify(toSave))};
  
