@@ -442,11 +442,8 @@ botMethods.djAdvanceEvent = function(data){
                         break;
  
                     case 'commands':
-                        if(API.getUser(fromID).permission > 1 || mubBot.admins.indexOf(fromID) > -1
-                        var randomSentence = Math.floor(Math.random() * 3);
-                        switch(randomSentence){
+                        if(API.getUser(fromID).permission > 1 || mubBot.admins.indexOf(fromID) > -1)                                                   
                         API.sendChat(mubBot.misc.modcommands + mubBot.misc.admincommands);
-                        }, 650);
                         break;
  
                     case "historyfilter":
@@ -661,7 +658,6 @@ botMethods.djAdvanceEvent = function(data){
             }
             if(mubBot.misc.ready || mubBot.admins.indexOf(fromID) > -1 ||API.getUser(fromID).permission > 1){
                 switch(command[0].toLowerCase()){
-                
                    case "weed":
                         if(typeof command[1] == "@"){
                             var crowd = API.getUsers();
