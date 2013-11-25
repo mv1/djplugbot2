@@ -142,6 +142,8 @@ mubBot.filters.racistWords = ["nigger","kike","spick","porchmonkey","camel jocke
 mubBot.filters.beggerWords = ["fan4fan","fan me","fan pls","fans please","fan please","fan 4 fan","fan back","give me fans","gimme fans","fan back"];
  
 mubBot.misc.tacos = ["blunt","cush","Chemo","Locoweed","marijuana","Ganja"];
+mubBot.misc.cookie = ["a chocolate chip cookie", "a sugar cookie", "an oatmeal raisin cookie", "a 'special' brownie", "an animal cracker", "a scooby snack", "a blueberry muffin", "a cupcake"];
+
  
 mubBot.pubVars.skipOnExceed;
 mubBot.pubVars.command = false;
