@@ -764,16 +764,16 @@ botMethods.djAdvanceEvent = function(data){
                             var randomSentence = Math.floor(Math.random() * 3);
                             switch(randomSentence){
                                 case 0:
-                                    API.sendChat("@" +crowd[randomUser].username+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie[randomCookie]);
+                                    API.sendChat("@" +crowd[randomUser].username+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie[randomCookie]+ ". Enjoy.");
                                     break;
                                 case 1:
-                                    API.sendChat("@" +crowd[randomUser].username+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie[randomCookie]);
+                                    API.sendChat("@" +crowd[randomUser].username+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie[randomCookie]+ ". Enjoy.");
                                     break;
                                 case 2:
-                                    API.sendChat("@" +crowd[randomUser].username+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie[randomCookie]);
+                                    API.sendChat("@" +crowd[randomUser].username+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie[randomCookie]+ ". Enjoy.");
                                     break;
                                 case 3:
-                                    API.sendChat("@" +crowd[randomUser].username+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie[randomCookie]);
+                                    API.sendChat("@" +crowd[randomUser].username+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie[randomCookie]+ ". Enjoy.");
                                     break;
                             }
                         }else{
@@ -782,16 +782,16 @@ botMethods.djAdvanceEvent = function(data){
                             var randomSentence = Math.floor(Math.random() * 3);
                             switch(randomSentence){
                                 case 0:
-                                    API.sendChat("@" +botMethods.cleanString(command[1])+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie[randomCookie]);
+                                    API.sendChat("@" +botMethods.cleanString(command[1])+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie[randomCookie]+ ". Enjoy.");
                                     break;
                                 case 1:
-                                    API.sendChat("@" +botMethods.cleanString(command[1])+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie[randomCookie]);
+                                    API.sendChat("@" +botMethods.cleanString(command[1])+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie[randomCookie]+ ". Enjoy.");
                                     break;
                                 case 2:
-                                    API.sendChat("@" +botMethods.cleanString(command[1])+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie[randomCookie]);
+                                    API.sendChat("@" +botMethods.cleanString(command[1])+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie[randomCookie]+ ". Enjoy.");
                                     break;
                                 case 3:
-                                    API.sendChat("@" +botMethods.cleanString(command[1])+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie[randomCookie]);
+                                    API.sendChat("@" +botMethods.cleanString(command[1])+ ", @" + data.from + " has rewarded you with " + mubBot.misc.cookie[randomCookie]+ ". Enjoy.");
                                     break;
                             }
                         }
