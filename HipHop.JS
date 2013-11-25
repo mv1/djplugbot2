@@ -758,16 +758,16 @@ botMethods.djAdvanceEvent = function(data){
                             var randomSentence = Math.floor(Math.random() * 3);
                             switch(randomSentence){
                                 case 0:
-                                    API.sendChat("@"+crowd[randomUser].username+", @"+ this.msgData.from +" Give you a cupcake");
+                                    API.sendChat("@"+crowd[randomUser].username+", @"+ msgData.from +" Give you a cupcake");
                                     break;
                                 case 1:
-                                    API.sendChat("@"+crowd[randomUser].username+", @"+ this.msgData.from +" Give you a brownie");
+                                    API.sendChat("@"+crowd[randomUser].username+", @"+ msgData.from +" Give you a brownie");
                                     break;
                                 case 2:
-                                    API.sendChat("@"+crowd[randomUser].username+", @"+ this.msgData.from +" Give you a beer");
+                                    API.sendChat("@"+crowd[randomUser].username+", @"+ msgData.from +" Give you a beer");
                                     break;
                                 case 3:
-                                    API.sendChat("@"+crowd[randomUser].username+", @"+ this.msgData.from +" Give you a cookie");
+                                    API.sendChat("@"+crowd[randomUser].username+", @"+ msgData.from +" Give you a cookie");
                                     break;
                             }
                         }
