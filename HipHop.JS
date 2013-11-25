@@ -108,7 +108,7 @@ mubBot.misc.lockSkipping = false;
 mubBot.misc.lockSkipped = "0";
 mubBot.misc.tacos = new Array();
 mubBot.misc.commands = " !songlink, !linkify, !source, !rules, !theme, !creator, !download, !weed, !hug, !cookie, !reward, !wiki, !maxlength, !commands";
-mubBot.misc.modcommands = " !bansong 1, !test, !status, !skip, !cancel, !save, !changelog, !trvf, !thf, !maxlength, !cooldown";
+mubBot.misc.modcommands = "  !test, !status, !skip, !cancel, !save, !changelog, !bansong 1, !trvf, !thf, !maxlength, !cooldown";
 mubBot.misc.admincommands =", !tsf, !trf, !tbf";
  
  
