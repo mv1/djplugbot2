@@ -85,6 +85,36 @@ function wootSong() {
  
 startWooting();
  
+
+ 
+ 
+ 
+
+var mubBot = {};
+var ruleSkip = {};
+mubBot.misc = {};
+mubBot.settings = {};
+mubBot.moderators = {};
+mubBot.filters = {};
+botMethods = {};
+mubBot.pubVars = {};
+ 
+toSave = {};
+toSave.moderators = mubBot.moderators;
+toSave.ruleSkip = ruleSkip;
+ 
+mubBot.misc.version = "2.0.27";
+mubBot.misc.origin = "This bot was created by MV1 and Neon alone, and it is copyrighted!";
+mubBot.misc.changelog = "Added a secondary check for history";
+mubBot.misc.ready = true;
+mubBot.misc.lockSkipping = false;
+mubBot.misc.lockSkipped = "0";
+mubBot.misc.tacos = new Array();
+mubBot.misc.commands = " !songlink, !linkify, !source, !rules, !theme, !creator, !download, !weed, !hug, !cookie, !reward, !wiki, !maxlength, !commands";
+mubBot.misc.modcommands = " !bansong 1, !test, !status, !skip, !cancel, !save, !changelog, !trvf, !thf, !maxlength, !cooldown";
+mubBot.misc.admincommands =", !tsf, !trf, !tbf";
+ 
+
 songs = [];
 woots = 0;
 woots = woots + API.getRoomScore().positive;
@@ -182,8 +212,8 @@ defineSong = function(obj){
     songModel.lastPlayedBy  = obj.lastPlay.dj.attributes.username;
     songModel.firstPlayedBy = obj.lastPlay.dj.attributes.username;
     songModel.timesPlayed   = 1;
-    //songModel.averageWoots = getMean();
-    //songModel.averageMehs = getMean();
+    songModel.averageWoots = getMean();
+    songModel.averageMehs = getMean();
     songs.push(songModel);
 };
  
@@ -203,86 +233,8 @@ API.on(API.DJ_ADVANCE, function(a){
      }
  }
 });
- 
-API.on(API.CHAT, function(obj){
-    command = false; var chatCommand = "";
-    if(obj.message.indexOf("!") === 0) command = true;
-    if(command){
-        chatCommand = obj.message.substring(1);
-        var commands = chatCommand.split(" ");
-        commands.push("undefined");
-        for(var i = 2; i < commands.length; i++){
-            if(commands[i] !== "undefined") commands[1] = commands[1] + " " + commands[i];
-        }
-    switch(commands[0].toLowerCase()){
-    
-        case "songinfo":
-            API.sendChat("Available Song Info: !titles - All known titles for this song, !lastplayed - Last time the song was played, !firstplayed - First time the song was played, !id - Song ID");
-            break;
-            
-        case "id":
-            API.sendChat("@"+obj.from+" "+API.getMedia().id);
-            break;
-            
-        case "lastplayed":
-            for(var i = 0; i < songs.length; i++){
-                if(API.getMedia().id == songs[i].id){
-                    API.sendChat("This song was last played on "+songs[i].lastPlayed);
-                }else{
-                    API.sendChat("I don't have any data for this song!");
-                }
-            }
-            break;
-        case "firstplayed":
-            for(var i = 0; i < songs.length; i++){
-                if(API.getMedia().id == songs[i].id){
-                    API.sendChat("This song was first played on "+songs[i].firstPlayed);
-                }else{
-                    API.sendChat("I don't have any data for this song!");
-                }
-            }
-            break;
-        case "titles":
-            for(var i = 0; i < songs.length; i++){
-                if(API.getMedia().id == songs[i].id){
-                    API.sendChat("Known titles: "+songs[i].title);
-                }else{
-                    API.sendChat("I don't have any data for this song!");
-                }
-            }
-        
-}
-}
-});
- 
- 
- 
- 
- 
-var mubBot = {};
-var ruleSkip = {};
-mubBot.misc = {};
-mubBot.settings = {};
-mubBot.moderators = {};
-mubBot.filters = {};
-botMethods = {};
-mubBot.pubVars = {};
- 
-toSave = {};
-toSave.moderators = mubBot.moderators;
-toSave.ruleSkip = ruleSkip;
- 
-mubBot.misc.version = "2.0.27";
-mubBot.misc.origin = "This bot was created by MV1 and Neon alone, and it is copyrighted!";
-mubBot.misc.changelog = "Added a secondary check for history";
-mubBot.misc.ready = true;
-mubBot.misc.lockSkipping = false;
-mubBot.misc.lockSkipped = "0";
-mubBot.misc.tacos = new Array();
-mubBot.misc.commands = " !songlink, !linkify, !source, !rules, !theme, !creator, !download, !weed, !hug, !cookie, !reward, !wiki, !maxlength, !commands";
-mubBot.misc.modcommands = " !bansong 1, !test, !status, !skip, !cancel, !save, !changelog, !trvf, !thf, !maxlength, !cooldown";
-mubBot.misc.admincommands =", !tsf, !trf, !tbf";
- 
+
+
  
 joined = new Date().getTime();
  
@@ -560,6 +512,57 @@ botMethods.djAdvanceEvent = function(data){
                 }
             }
         }
+    });
+    
+    
+    
+    API.on(API.CHAT, function(obj){
+    command = false; var chatCommand = "";
+    if(obj.message.indexOf("!") === 0) command = true;
+    if(command){
+        chatCommand = obj.message.substring(1);
+        var commands = chatCommand.split(" ");
+        commands.push("undefined");
+        for(var i = 2; i < commands.length; i++){
+            if(commands[i] !== "undefined") commands[1] = commands[1] + " " + commands[i];
+        }
+    switch(commands[0].toLowerCase()){
+        case "songinfo":
+            API.sendChat("Available Song Info: !titles - All known titles for this song, !lastplayed - Last time the song was played, !firstplayed - First time the song was played, !id - Song ID");
+            break;
+        case "id":
+            API.sendChat("@"+obj.from+" "+API.getMedia().id);
+            break;
+        case "lastplayed":
+            for(var i = 0; i < songs.length; i++){
+                if(API.getMedia().id == songs[i].id){
+                    API.sendChat("This song was last played on "+songs[i].lastPlayed);
+                }else{
+                    API.sendChat("I don't have any data for this song!");
+                }
+            }
+            break;
+        case "firstplayed":
+            for(var i = 0; i < songs.length; i++){
+                if(API.getMedia().id == songs[i].id){
+                    API.sendChat("This song was first played on "+songs[i].firstPlayed);
+                }else{
+                    API.sendChat("I don't have any data for this song!");
+                }
+            }
+            break;
+        case "titles":
+            for(var i = 0; i < songs.length; i++){
+                if(API.getMedia().id == songs[i].id){
+                    API.sendChat("Known titles: "+songs[i].title);
+                }else{
+                    API.sendChat("I don't have any data for this song!");
+                }
+                break;
+            }
+        
+         }
+      }
     });
  
     API.on(API.CHAT, function(data){
