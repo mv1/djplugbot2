@@ -446,7 +446,7 @@ botMethods.djAdvanceEvent = function(data){
                         var randomSentence = Math.floor(Math.random() * 3);
                         switch(randomSentence){
                         API.sendChat(mubBot.misc.modcommands + mubBot.misc.admincommands);
-                        }, 650);
+                        }, 1000);
                         break;
  
                     case "historyfilter":
