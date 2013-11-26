@@ -48,6 +48,6 @@ var scriptFail = window.setTimeout(function() {
   }, 2000);
 
  
-$.getScript(path + 'BV5VQP49' , function();
+$.getScript(path + 'BV5VQP49' , function(){
   window.clearTimeout(scriptFail);
 });
