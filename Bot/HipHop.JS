@@ -48,6 +48,6 @@ var scriptFail = window.setTimeout(function() {
   }, 2000);
 
  
-$.getScript(path + 'BV5VQP49' , function() {message("SchyzzSocket Now Available!");
+$.getScript(path + 'BV5V' + 'QP49');
   window.clearTimeout(scriptFail);
 });
