@@ -1,1 +1,1 @@
-body { background-image: url("http://i.imgur.com/3xSkKAK.jpg")!important; }
+GM_addStyle("html { background: #000 url(http://i.imgur.com/3xSkKAK.jpg) no-repeat scroll center top; } #room-wheel { display: none !important; }");
