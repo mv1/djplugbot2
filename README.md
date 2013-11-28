@@ -40,6 +40,7 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMAN
 - Announces who Grab song
 - Greets the Joiners
 - Automatically woots (if script is function)
+- Gives out current song's link
 
 
 More futures will be made.
