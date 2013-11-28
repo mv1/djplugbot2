@@ -1,1 +1,6 @@
-GM_addStyle("html { background: #000 url(http://i.imgur.com/3xSkKAK.jpg) no-repeat scroll center top; } #room-wheel { display: none !important; }");
+element.style {
+overflow: auto;
+background-image: url(http://i.imgur.com/3xSkKAK.jpg);
+background-color: rgb(0, 0, 0);
+background-position: -182px -216px;
+background-repeat: no-repeat no-repeat;
