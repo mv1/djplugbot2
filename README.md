@@ -43,6 +43,8 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMAN
 - Gives out current song's link
 - Filters Bad | Racism | Fan beggin (deletes chat)
 - Alerts users that Fan begging is not allowed.
+- Gives advice about wooting
+- Gives advice about mehing
 
 
 More futures will be made.
