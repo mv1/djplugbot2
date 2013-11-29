@@ -41,6 +41,8 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMAN
 - Greets the Joiners
 - Automatically woots (if script is function)
 - Gives out current song's link
+- Filters Bad | Racism | Fan beggin (deletes chat)
+- Alerts users that Fan begging is not allowed.
 
 
 More futures will be made.
