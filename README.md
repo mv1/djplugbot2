@@ -49,6 +49,7 @@ The commands can be found here: http://goo.gl/WLaiaq
 - Alerts users that Fan begging is not allowed.
 - Gives advice about wooting
 - Gives advice about mehing
+- Searches the dictionary to help idiots in lobby
 
 
 More futures will be made.
