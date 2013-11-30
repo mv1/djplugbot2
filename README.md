@@ -20,6 +20,10 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMAN
  * @Author:    Tawi Jordan - ๖ۣۜĐJ - ɴᴇᴏɴ - TFL (Member. on Plug.dj)
  * @Member:    MV1 - MV1 (Owner. of HipHop TT)
 
+--------------
+##### Commands ######
+The commands can be found here: http://goo.gl/WLaiaq
+
 
 --------------
 
