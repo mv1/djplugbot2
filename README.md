@@ -14,8 +14,7 @@ BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAM
 RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
- NOTE:  PLEASE CONTACT DJ-NEON FOR THIS SCRIPT (DO NOT CHANGE ANYTHING ON THIS SCRIPT OR USE THIS SCRIPT WHICH
- WAS WRITTEN BY IT'S RIGHTFUL OWNER: DJ NOEN)
+[note] DO NOT USE THIS SCRIPT, THIS SCRIPT IS FOR Hip-Hop TurnTabe ONLY!
 
  * @Author:    Tawi Jordan - ๖ۣۜĐJ - ɴᴇᴏɴ - TFL (Member. on Plug.dj)
  * @Member:    MV1 - MV1 (Owner. of HipHop TT)
@@ -50,6 +49,11 @@ The commands can be found here: http://goo.gl/WLaiaq
 - Gives advice about wooting
 - Gives advice about mehing
 - Searches the dictionary to help idiots in lobby
+- Gives props and bonus to users
+- Punish commands (Fun Command)
+- Rolls a dice number
+- Gives a fortune quote (Fun Quotes)
+- Flips coins (Fun Command)
 
 
 More futures will be made.
