@@ -54,6 +54,11 @@ The commands can be found here: http://goo.gl/WLaiaq
 - Rolls a dice number
 - Gives a fortune quote (Fun Quotes)
 - Flips coins (Fun Command)
+- Woot song when command is been given
+- Meh song when command is been given
+- Lock booth
+- Skips the current dj
+- unlocks booth
 
 
 More futures will be made.
