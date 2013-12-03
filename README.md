@@ -30,7 +30,7 @@ The commands can be found here: http://goo.gl/WLaiaq
 ### What does this bot do ###
 
 - Checks history
-- Mod commands and Uer commands (Admins included)
+- Mod commands and User commands (Admins included)
 - Spams chat (If UnAthorized User is using this script)
 - Filter bad words
 - Gives hugs    (Fun Command)
