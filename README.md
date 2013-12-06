@@ -59,6 +59,7 @@ The commands can be found here: http://goo.gl/WLaiaq
 - Lock booth
 - Skips the current dj
 - unlocks booth
+- dogfacts and catfacts 
 
 
 More futures will be made.
