@@ -21,7 +21,7 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMAN
 
 --------------
 #### Commands #####
-The commands can be found here: http://goo.gl/WLaiaq
+The commands can be found here: http://goo.gl/Wp6W7c
 
 
 --------------
