@@ -280,7 +280,6 @@ Array.prototype.remove=function(){var c,f=arguments,d=f.length,e;while(d&&this.l
 if(window.location.href === "http://plug.dj/"+lobby+"/"){
 API.on(API.DJ_ADVANCE, djAdvanceEvent);
 API.on(API.USER_JOIN, UserJoin);
-API.on(API.VOTE_SKIP, SKIP);
 API.on(API.CURATE_UPDATE, curated);
 API.on(API.DJ_ADVANCE, DJ_ADVANCE);
 
@@ -308,22 +307,21 @@ botMethods.skip = function(){
 };
 
 HipHopBot.unhook = function(){
-    setTimeout(function(){
-    API.off(API.DJ_ADVANCE, djAdvanceEvent);
-    API.off(API.DJ_ADVANCE, woot);
-    API.off(API.USER_JOIN, UserJoin);
-    API.off(API.VOTE_SKIP, SKIP);
-    API.off(API.DJ_ADVANCE, listener);
-    API.off(API.CURATE_UPDATE, curated);
-    API.off(API.DJ_ADVANCE, DJ_ADVANCE);
-    API.off(API.CHAT);
-    }, 100);
+setTimeout(function(){
+API.off(API.DJ_ADVANCE, djAdvanceEvent);
+API.off(API.DJ_ADVANCE, woot);
+API.off(API.USER_JOIN, UserJoin);
+API.off(API.DJ_ADVANCE, listener);
+API.off(API.CURATE_UPDATE, curated);
+API.off(API.DJ_ADVANCE, DJ_ADVANCE);
+API.off(API.CHAT);
+}, 100);
 };
 
 HipHopBot.hook = function(){
-    setTimeout(function(){
-    (function(){$.getScript('http://goo.gl/5A2IaF');}());
-    }, 100);
+setTimeout(function(){
+(function(){$.getScript('http://goo.gl/5A2IaF');}());
+}, 100);
 };
 
 botMethods.load = function(){
