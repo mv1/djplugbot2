@@ -297,13 +297,13 @@ API.sendChat(obj.user.username + " Added this song!");
 }
  
 function djAdvanceEvent(data){
-    setTimeout(function(){ botMethods.djAdvanceEvent(data); }, 500);
+    setTimeout(function(){ botMethods.data }, 500);
 }
- 
+
 botMethods.skip = function(){
     setTimeout(function(){
     API.moderateForceSkip();
-    }, 1000);
+    }, 500);
 };
 
 HipHopBot.unhook = function(){
@@ -805,12 +805,7 @@ botMethods.djAdvanceEvent = function(data){
                         }
                     }
                         break;
-               
-                    case 'cancel':
-                        cancel = true;
-                        API.sendChat('AutoSkip cancelled');
-                        break;
- 
+                        
                     case "lockskip":
                         if(HipHopBot.admins.indexOf(fromID) > -1){
                             API.moderateLockWaitList(true);
