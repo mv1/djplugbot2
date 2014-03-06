@@ -733,6 +733,23 @@ botMethods.djAdvanceEvent = function(data){
                         }
                     }
                         break;
+                        
+                    case "die":
+                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                           API.sendChat('Unhooking Events...');
+                        setTimeout(function(){
+                           API.sendChat('Deleting bot data...');
+                        }, 150);
+                        setTimeout(function(){
+                           API.sendChat('Consider me dead');
+                        }, 475);
+                        setTimeout(function(){
+                           HipHopBot.unhook();
+                        }, 700);
+                        }else{
+                           API.sendChat("This command requires bouncer +");
+                        }
+                        break;
  
                     case "unlock":
                         if(HipHopBot.admins.indexOf(fromID) > -1){
