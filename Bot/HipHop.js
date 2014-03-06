@@ -309,9 +309,7 @@ botMethods.skip = function(){
 HipHopBot.unhook = function(){
 setTimeout(function(){
 API.off(API.DJ_ADVANCE, djAdvanceEvent);
-API.off(API.DJ_ADVANCE, woot);
 API.off(API.USER_JOIN, UserJoin);
-API.off(API.DJ_ADVANCE, listener);
 API.off(API.CURATE_UPDATE, curated);
 API.off(API.DJ_ADVANCE, DJ_ADVANCE);
 API.off(API.CHAT);
