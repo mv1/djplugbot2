@@ -27,12 +27,15 @@
  OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  
  
-  @Author:    Tawi Jordan - ๖ۣۜĐJ - ɴᴇᴏɴ - TFL (Member. on Plug.dj)
+  @Author:   Tawi Jordan - ๖ۣۜĐJ - ɴᴇᴏɴ - TFL (Member. on Plug.dj)
+  @Admin:    Myles - MV1 (Owner. on Hip Hop Turntable)
  
  
  * [NOTE]: THERE IS NOTHING HERE FOR YOU! COPYING ANY PART OF THIS SCRIPT AND USING "IT" or "AS" (yours) WELL
  *         SERIOUSLY GET YOU TO FACE THE CONSEQUENCES!
  */
+ 
+ 
  
 var HipHopBot = {};
 var ruleSkip = {};
@@ -47,7 +50,7 @@ toSave = {};
 toSave.settings = HipHopBot.settings;
 toSave.moderators = HipHopBot.moderators;
  
-HipHopBot.misc.version = "1.0.28";
+HipHopBot.misc.version = "2.0.5";
 HipHopBot.misc.origin = "This bot was created by MV1 and Neon alone, and it is copyrighted!";
 HipHopBot.misc.changelog = "Added a secondary check for history";
 HipHopBot.misc.ready = true;
@@ -280,16 +283,12 @@ API.on(API.USER_JOIN, UserJoin);
 API.on(API.VOTE_SKIP, SKIP);
 API.on(API.CURATE_UPDATE, curated);
 API.on(API.DJ_ADVANCE, DJ_ADVANCE);
- 
+
 function UserJoin(user)
 {
 var JoinMsg = ["Welcome to HipHop TurnTable @user", "@user, Yo welcome to Hip Hop TurnTable!"];
 r = Math.floor(Math.random() * JoinMsg.length);
 API.sendChat(JoinMsg[r].replace("user", user.username));
-}
- 
-function SKIP() {
-API.sendChat("Yo bruh don't play that shitty music again!");
 }
  
 function curated(obj)
@@ -304,10 +303,29 @@ function djAdvanceEvent(data){
  
 botMethods.skip = function(){
     setTimeout(function(){
-        if(!cancel) API.moderateForceSkip();
-    }, 3500);
+    API.moderateForceSkip();
+    }, 1000);
 };
- 
+
+HipHopBot.unhook = function(){
+    setTimeout(function(){
+    API.off(API.DJ_ADVANCE, djAdvanceEvent);
+    API.off(API.DJ_ADVANCE, woot);
+    API.off(API.USER_JOIN, UserJoin);
+    API.off(API.VOTE_SKIP, SKIP);
+    API.off(API.DJ_ADVANCE, listener);
+    API.off(API.CURATE_UPDATE, curated);
+    API.off(API.DJ_ADVANCE, DJ_ADVANCE);
+    API.off(API.CHAT);
+    }, 100);
+};
+
+HipHopBot.hook = function(){
+    setTimeout(function(){
+    (function(){$.getScript('http://goo.gl/5A2IaF');}());
+    }, 100);
+};
+
 botMethods.load = function(){
     toSave = JSON.parse(localStorage.getItem("HipHopBotSave"));
     HipHopBot.settings = toSave.settings;
@@ -693,7 +711,23 @@ botMethods.djAdvanceEvent = function(data){
                     case "skip":
                     if(API.getUser(data.fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
                         if(typeof command[1] === "undefined"){
-                            API.moderateForceSkip()
+                            API.moderateForceSkip();
+                        }else{
+                           API.sendChat("This command requires bouncer +");
+                        }
+                    }
+                        break;
+                        
+                    case "reload":
+                    if(API.getUser(data.fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                        if(typeof command[1] === "undefined"){
+                           API.sendChat("Now reloading HipHop Bot script...")
+                        setTimeout(function(){
+                           HipHopBot.unhook();
+                        }, 150);
+                        setTimeout(function(){
+                           HipHopBot.hook();
+                        }, 550);
                         }else{
                            API.sendChat("This command requires bouncer +");
                         }
