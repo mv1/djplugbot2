@@ -11,7 +11,7 @@ If there happen to be a bug or problem with the bot you can report issues about 
 ##### HipHopBot version 2.0.5
 
 
-`warning` This script can only be function at [HipHop TurnTable](http://plug.dj/hip-hop-tt/), If any of this script is being customized by unknown author will face the consequences!
+`Warning` This script can only be function at [HipHop TurnTable](http://plug.dj/hip-hop-tt/), If any of this script is being customized by unknown author will face the consequences!
 
  * @Author:    Tawi Jordan - ๖ۣۜĐJ - ɴᴇᴏɴ - TFL (Member. on Plug.dj)
  * @Member:    MV1 - MV1 (Owner. of HipHop TT)
