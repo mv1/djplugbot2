@@ -18,4 +18,5 @@ If there happen to be a bug or problem with the bot you can report issues about 
 
 --------------
 #### Commands #####
-The commands can be found here: http://goo.gl/Wp6W7c
+Current bot commands can be found [HERE](http://goo.gl/Wp6W7c)
+
