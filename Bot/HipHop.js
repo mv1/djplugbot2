@@ -446,7 +446,7 @@ botMethods.djAdvanceEvent = function(data){
         }else{
             setTimeout(function(){
                 if(botMethods.checkHistory() !== 1){
-                    API.sendChat("@" + API.getDJ().username + ", playing songs that are in the history isn't allowed, please check next time! Skipping..");
+                    API.sendChat("@"+ API.getDJ().username +", playing songs that are in the history isn't allowed, please check next time! Skipping..");
                     API.moderateForceSkip();
                 };
             }, 100);
