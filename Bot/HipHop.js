@@ -663,6 +663,19 @@ botMethods.djAdvanceEvent = function(data){
                         }
                         break;
                         
+                case "grab":
+                case "snag":
+                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                        var addsong = ["[user] I am now grabbing current song.","[user] This song is now mine! :blush:","[user] Now adding this current music video..."];
+                        r = Math.floor(Math.random() * addsong.length);
+                            API.sendChat(addsong[r].replace("user", data.from));
+                            $(".icon-curate").click();
+                            $($(".curate").children(".menu").children().children()[0]).mousedown();
+                        }else{
+                         API.sendChat("This command requires staff members only!");
+                        }
+                        break;
+                        
                 case "add":
                         if(API.getUser(fromID).permission < 2 || HipHopBot.admins.indexOf(fromID) > -1){
                             API.moderateAddDJ(data.fromID);
