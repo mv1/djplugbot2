@@ -656,7 +656,7 @@ botMethods.djAdvanceEvent = function(data){
                         break;
                         
                 case "say":
-                        if(API.getUser(fromID).permission > 1 || Funbot.admins.indexOf(fromID) > -1 || typeof command[1] === "undefined"){
+                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1 || typeof command[1] === "undefined"){
                            API.sendChat(command[1]);
                         }else{
                          API.sendChat("This command requires staff members only!");
@@ -833,7 +833,7 @@ botMethods.djAdvanceEvent = function(data){
                         break;
                         
                 case "status":
-                        if(API.getUser(fromID).permission > 1 || Funbot.admins.indexOf(fromID) > -1){
+                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
                             var response = "";
                             var currentTime = new Date().getTime();
                             var minutes = Math.floor((currentTime - joined) / 60000);
@@ -843,10 +843,10 @@ botMethods.djAdvanceEvent = function(data){
                                 hours++;
                             }
                             hours == 0 ? response = "Running for " + minutes + "m " : response = "Running for " + hours + "h " + minutes + "m";
-                            response = response + " | Begger filter: "+ Funbot.settings.beggerFilter;
-                            response = response + " | SongLimit: " + Funbot.settings.songLimit + "m";
-                            response = response + " | Cooldown: " + Funbot.settings.cooldown + "s";
-                            response = response + " | CPU Filter: "+ Funbot.settings.removedFilter;
+                            response = response + " | Begger filter: "+ HipHopBot.settings.beggerFilter;
+                            response = response + " | SongLimit: " + HipHopBot.settings.songLimit + "m";
+                            response = response + " | Cooldown: " + HipHopBot.settings.cooldown + "s";
+                            response = response + " | CPU Filter: "+ HipHopBot.settings.removedFilter;
                             API.sendChat(response);
                         }else {
                            API.sendChat("This command requires bouncer +");
