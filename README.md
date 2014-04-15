@@ -8,7 +8,7 @@ Permission to change anything on this script, You can always contact the author 
 [Plug Lounge](http://goo.gl/cMMMc1)
 If there happen to be a bug or problem with the bot you can report issues about Bot if it has bugs.
 
-##### HipHopBot version 2.0.5
+##### HipHopBot version 2.1.7
 
 
 `Warning` This script can only be function at [HipHop TurnTable](http://plug.dj/hip-hop-tt/), If any of this script is being customized by unknown author will face the consequences!
