@@ -478,7 +478,7 @@ botMethods.djAdvanceEvent = function(data){
                         
                 case "rule":
                 case "rules":
-                        if(HipHopBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission < 2){
+                        if(HipHopBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission < 2 || typeof command[1] === "undefined"){
                             API.sendChat("Rules: 1) Play mostly hip hop. 2) Avoid mainstream hip hop. 3) Trolls well be force to be booted. 4) No auto join. 5) No songs over "+ HipHopBot.settings.maxLength +" minutes. 6) No swag hip-pop. 7) Woot while on waitlist.");
                         }else if(command[1].indexOf("@") > -1){
                             API.sendChat(command[1]+" Rules: 1) Play mostly hip hop. 2) Avoid mainstream hip hop. 3) Trolls well be force to be booted. 4) No auto join. 5) No songs over "+ HipHopBot.settings.maxLength +" minutes. 6) No swag hip-pop. 7) Woot while on waitlist.");
@@ -487,7 +487,7 @@ botMethods.djAdvanceEvent = function(data){
                         
                 case "theme":
                 case "themes":
-                        if(HipHopBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission < 2){
+                        if(HipHopBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission < 2 || typeof command[1] === "undefined"){
                             API.sendChat("Play Mostly Hip Hop");
                         }else if(command[1].indexOf("@") > -1){
                             API.sendChat(command[1]+" Play Mostly Hip Hop");
