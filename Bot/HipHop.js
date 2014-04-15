@@ -50,32 +50,28 @@ toSave = {};
 toSave.settings = HipHopBot.settings;
 toSave.moderators = HipHopBot.moderators;
  
-HipHopBot.misc.version = "2.0.5";
+HipHopBot.misc.version = "2.1.7";
 HipHopBot.misc.origin = "This bot was created by MV1 and Neon alone, and it is copyrighted!";
 HipHopBot.misc.changelog = "Added a secondary check for history";
 HipHopBot.misc.ready = true;
-HipHopBot.misc.lockSkipping = false;
 HipHopBot.misc.lockSkipped = "0";
 HipHopBot.misc.tacos = new Array();
-var lobby = "hip-hop-tt";
- 
+var songBoundary = 60 * 10;
+var announcementTick = 60 * 10;
+var lastAnnouncement = 0;
+
  
 joined = new Date().getTime();
  
 cancel = false;
  
 HipHopBot.filters.swearWords = new Array();
-HipHopBot.filters.commandWords = new Array();
-HipHopBot.filters.racistWords = new Array();
 HipHopBot.filters.beggerWords = new Array();
  
 HipHopBot.settings.maxLength = 10; //minutes
 HipHopBot.settings.cooldown = 10; //seconds
 HipHopBot.settings.staffMeansAccess = true;
-HipHopBot.settings.historyFilter = true;
 HipHopBot.settings.swearFilter = true;
-HipHopBot.settings.commandFilter = true;
-HipHopBot.settings.racismFilter = true;
 HipHopBot.settings.beggerFilter = true;
 HipHopBot.settings.interactive = true;
 HipHopBot.settings.ruleSkip = true;
@@ -83,10 +79,33 @@ HipHopBot.settings.removedFilter = true;
  
 //Admins                [Dj-Neon-TFL]                   [MV1]
 HipHopBot.admins = ["50aeaeb6c3b97a2cb4c25bd2","528c1f3396fba53b813d216a"];
+
+// Random announcements.
+var announcements = 
+[""];
+
+// Keywords of blocked songs
+var blockedSongs = [
+    "Rick Roll",
+    "GANGNAM",
+    "The Fox",
+    "The Fox [Official music video HD]",
+    "10 hour",
+    "Trololo",
+    "#SELFIE (Official Music Video)",
+    "Heyayayay"
+];
+
+// Keywords of blocked artist.
+var blockedArtists = [
+    "Rick Astley",
+    "Miley Cyrus",
+    "Eduard Khil",
+    "Justin Bieber",
+    "Lil wayne"
+];
  
 HipHopBot.filters.swearWords = ["slut","mofo","penis","penus","fuck","shit","bitch","cunt","twat","faggot","queer","dumb ass","pussy","dick","cocksucker","asshole","vagina","tit","mangina","tits","cock","jerk","puta","puto","cum","sperm","ass-hat","ass-jabber","assbanger","assfuck","assfucker","assnigger","butt plug","bollox","blowJob","Blow job","bampot","cameltoe","chode","clitfuck","cunt","cracker","dildo","douche","doochbag","dike","dyke","fatass","fat ass","fuckass","fuckbag","fuckboy","fuckbrain","gay","gaylord","handjob","hoe","Jizz","jerk off","kunt","lesbian","lesbo","lezzie","minge","munging","nut sack","nutsack","queer","queef","rimjob","scrote","schlong","titfuck","twat","unclefucker","va-j-j","vajayjay","vjayjay","wankjob","whore"];
-HipHopBot.filters.commandWords = ["!say","!catfact","!dogfact","!fortune","!songlink","!commands","!bansong 1","!down","!join","!woot","!meh","!status","!tcf","!cf","!rules","!version","!test"];
-HipHopBot.filters.racistWords = ["nigger","kike","spick","porchmonkey","camel jockey","towelhead","towel head","chink","gook","porch monkey","cracker","Coolie","nigga","nigguh","black shit","black monkey","you ape","you monkey","you gorilla","black ass","assnigger","honkey","White bread","white ass","jungle bunny","niglet","nigaboo","paki","ruski","sand nigger","sandnigger","wetback","wet back"];
 HipHopBot.filters.beggerWords = ["fanme","fan me","fan4fan","fan 4 fan","fan pls","fans please","need fan","more fan","fan back","give me fans","gimme fans"];
  
 //Fun commands for misc below.
@@ -277,7 +296,7 @@ HipHopBot.pubVars.skipOnExceed;
 HipHopBot.pubVars.command = false;
  
 Array.prototype.remove=function(){var c,f=arguments,d=f.length,e;while(d&&this.length){c=f[--d];while((e=this.indexOf(c))!==-1){this.splice(e,1)}}return this};
-if(window.location.href === "http://plug.dj/"+lobby+"/"){
+if(window.location.href === "http://plug.dj/hip-hop-tt/"){window.setInterval(sendAnnouncement, 1000 * announcementTick);
 API.on(API.DJ_ADVANCE, djAdvanceEvent);
 API.on(API.USER_JOIN, UserJoin);
 API.on(API.CURATE_UPDATE, curated);
@@ -308,10 +327,6 @@ botMethods.skip = function(){
 
 HipHopBot.unhook = function(){
 setTimeout(function(){
-API.off(API.DJ_ADVANCE, djAdvanceEvent);
-API.off(API.USER_JOIN, UserJoin);
-API.off(API.CURATE_UPDATE, curated);
-API.off(API.DJ_ADVANCE, DJ_ADVANCE);
 API.off(API.USER_JOIN);
 API.off(API.USER_LEAVE);
 API.off(API.USER_SKIP);
@@ -320,7 +335,7 @@ API.off(API.CURATE_UPDATE);
 API.off(API.DJ_ADVANCE);
 API.off(API.VOTE_UPDATE);
 API.off(API.CHAT);
-}, 100);
+}, 500);
 };
 
 HipHopBot.hook = function(){
@@ -357,51 +372,84 @@ botMethods.checkHistory = function(){
     return caught;
 };
  
-botMethods.getID = function(username){
-    var users = API.getUsers();
-    var result = "";
-    for(var i = 0; i < users.length; i++){
-        if(users[i].username === username){
-            result = users[i].id;
-            return result;
-        }
+function getUserID(username) {
+  var users = API.getUsers();
+  for (var i in users) {
+    if (users[i].username == username) {
+      return users[i].id;
     }
- 
-    return "notFound";
+  }
+  return "User Not Found!";
 };
  
 botMethods.cleanString = function(string){
     return string.replace(/&#39;/g, "'").replace(/&amp;/g, "&").replace(/&#34;/g, "\"").replace(/&#59;/g, ";").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
 };
  
+function listener(data){
+    if (data == null)
+    {
+        return;
+    }
+ 
+    var title = data.media.title;
+    var author = data.media.author;
+    for (var i = 0; i < blockedSongs.length; i++)
+    {
+        if (title.indexOf(blockedSongs[i]) != -1 || author.indexOf(blockedArtists[i]) != -1)
+        {
+            API.moderateForceSkip();
+            chatMe("I Skipped: "+ title +" because it is blocked.");
+            return;
+        }
+    }
+ 
+    var songLenRaw = $("#time-remaining-value").text();
+    var songLenParts = songLenRaw.split(":");
+    var songLen = (parseInt(songLenParts[0].substring(1)) * 60) + parseInt(songLenParts[1]);
+    if (songLen >= songBoundary)
+    {
+        window.setTimeout(skipLongSong, 1000 * songBoundary);
+    }
+}
+ 
+function skipLongSong()
+{
+    chatMe("Skipping song because it has exceeded the song limit (" + (songBoundary / 60) + " minutes.)");
+    API.moderateForceSkip();
+}
+ 
+function sendAnnouncement()
+{
+        if (lastAnnouncement++ >= announcements.length - 1)
+        {
+                lastAnnouncement = 0;
+        }
+    chatMe(announcements[lastAnnouncement]);
+}
+ 
+function chatMe(msg)
+{
+        API.sendChat(msg);
+};
+ 
+ 
 botMethods.djAdvanceEvent = function(data){
     clearTimeout(HipHopBot.pubVars.skipOnExceed);
-    if(HipHopBot.misc.lockSkipping){
-        API.moderateAddDJ(HipHopBot.misc.lockSkipped);
-        HipHopBot.misc.lockSkipped = "0";
-        HipHopBot.misc.lockSkipping = false;
-        setTimeout(function(){ API.moderateRoomProps(false, true); }, 500);
-    }
     var song = API.getMedia();
-    if(botMethods.checkHistory() > 0 && HipHopBot.settings.historyFilter){
+    if(botMethods.checkHistory() !== -1){
         if(API.getUser().permission < 2){
             API.sendChat("This song is in the history! You should make me a mod so that I could skip it!");
         }else if(API.getUser().permission > 1){
-            API.sendChat("@" + API.getDJ().username + ", playing songs that are in the history isn't allowed, please check next time! Skipping..");
+            API.sendChat("@"+ API.getDJ().username +", playing songs that are in the history isn't allowed, please check next time! Skipping..");
             API.moderateForceSkip();
-        }else if(song.duration > HipHopBot.settings.maxLength * 60){
-            HipHopBot.pubVars.skipOnExceed = setTimeout( function(){
-                API.sendChat("@"+ API.getDJ().username +" You have now played for as long as this room allows, time to let someone else have the booth!");
-                API.moderateForceSkip();
-            }, HipHopBot.settings.maxLength * 60000);
-            API.sendChat("@"+ API.getDJ().username +" This song will be skipped " + HipHopBot.settings.maxLength + " minutes from now because it exceeds the max song length.");
         }else{
             setTimeout(function(){
-                if(botMethods.checkHistory() > 0 && HipHopBot.settings.historyFilter){
+                if(botMethods.checkHistory() !== 1){
                     API.sendChat("@" + API.getDJ().username + ", playing songs that are in the history isn't allowed, please check next time! Skipping..");
                     API.moderateForceSkip();
                 };
-            }, 1500);
+            }, 100);
         }
     }
 };
@@ -409,195 +457,97 @@ botMethods.djAdvanceEvent = function(data){
     API.on(API.CHAT, function(data){
         if(data.message.indexOf('!') === 0){
             var msg = data.message, from = data.from, fromID = data.fromID;
+            var id = data.fromID;var msg = data.message;var userfrom = data.from;
             var command = msg.substring(1).split(' ');
             if(typeof command[2] != "undefined"){
                 for(var i = 2; i<command.length; i++){
                     command[1] = command[1] + ' ' + command[i];
                 }
             }
-            if(HipHopBot.misc.ready || HipHopBot.admins.indexOf(fromID) > -1 || API.getUser(data.fromID).permission > 1){
+            if(HipHopBot.misc.ready || HipHopBot.admins.indexOf(fromID) > -1 || API.getUser(data.fromID).permission > 1 || API.getUser(data.fromID).permission < 2){
                 switch(command[0].toLowerCase()){
- 
-                    case "votes":
-                        if(API.getUser(fromID).permission < 2 || HipHopBot.admins.indexOf(fromID) > -1){
-                            API.sendChat("Users vote:  :+1: " + API.getRoomScore().positive + " | :purple_heart: " + API.getRoomScore().curates+" | :-1: " + API.getRoomScore().negative);
-                            HipHopBot.misc.ready = false;
-                            setTimeout(function(){ HipHopBot.misc.ready = true; }, HipHopBot.settings.cooldown * 1000);
+                
+                case "command":
+                case "commands":
+                        if(HipHopBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission < 2){
+                            API.sendChat("My commands can be found here: http://goo.gl/j1MqYo");
+                        }else if(command[1].indexOf("@") > -1){
+                            API.sendChat(command[1]+" My commands can be found here: http://goo.gl/j1MqYo");
                         }
                         break;
-               
-                    case "djinfo":
-                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
-                        var total = API.getDJ().djPoints + API.getDJ().listenerPoints + API.getDJ().curatorPoints;
-                            API.sendChat("Current dj is: "+ API.getDJ().username +". Points: "+ total +" | Fans: "+ API.getDJ().fans +" | Curated: "+ API.getDJ().curatorPoints +".");
-                            HipHopBot.misc.ready = false;
-                            setTimeout(function(){ HipHopBot.misc.ready = true; }, HipHopBot.settings.cooldown * 1000);
-                        }
-                        break;
- 
-                    case "bot":
-                        if(API.getUser(fromID).permission < 2 || HipHopBot.admins.indexOf(fromID) > -1){
-                            API.sendChat("What faggot? @"+ data.from);
-                            HipHopBot.misc.ready = false;
-                            setTimeout(function(){ HipHopBot.misc.ready = true; }, HipHopBot.settings.cooldown * 1000);
-                        }
-                        break;
- 
-                    case "ping":
-                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission < 2){
-                            API.sendChat("@"+ data.from +" Pong!");
-                            HipHopBot.misc.ready = false;
-                            setTimeout(function(){ HipHopBot.misc.ready = true; }, HipHopBot.settings.cooldown * 1000);
-                        }
-                        break;
- 
-                    case "marco":
-                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission < 2){
-                            API.sendChat("@"+ data.from +" POLO!");
-                            HipHopBot.misc.ready = false;
-                            setTimeout(function(){ HipHopBot.misc.ready = true; }, HipHopBot.settings.cooldown * 1000);
-                        }
-                        break;
- 
-                    case "rules":
-                        if(typeof command[1] == "undefined"){
+                        
+                case "rule":
+                case "rules":
+                        if(HipHopBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission < 2){
                             API.sendChat("Rules: 1) Play mostly hip hop. 2) Avoid mainstream hip hop. 3) Trolls well be force to be booted. 4) No auto join. 5) No songs over "+ HipHopBot.settings.maxLength +" minutes. 6) No swag hip-pop. 7) Woot while on waitlist.");
                         }else if(command[1].indexOf("@") > -1){
                             API.sendChat(command[1]+" Rules: 1) Play mostly hip hop. 2) Avoid mainstream hip hop. 3) Trolls well be force to be booted. 4) No auto join. 5) No songs over "+ HipHopBot.settings.maxLength +" minutes. 6) No swag hip-pop. 7) Woot while on waitlist.");
-                        }else{
-                            API.sendChat("Rules: 1) Play mostly hip hop. 2) Avoid mainstream hip hop. 3) Trolls well be force to be booted. 4) No auto join. 5) No songs over "+ HipHopBot.settings.maxLength +" minutes. 6) No swag hip-pop. 7) Woot while on waitlist.");
-                        }
-                        if(HipHopBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                            HipHopBot.misc.ready = false;
-                            setTimeout(function(){ HipHopBot.misc.ready = true; }, HipHopBot.settings.cooldown * 1000);
                         }
                         break;
- 
-                    case "theme":
-                        if(typeof command[1] == "undefined"){
+                        
+                case "theme":
+                case "themes":
+                        if(HipHopBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission < 2){
                             API.sendChat("Play Mostly Hip Hop");
                         }else if(command[1].indexOf("@") > -1){
                             API.sendChat(command[1]+" Play Mostly Hip Hop");
-                        }else{
-                            API.sendChat("Play Mostly Hip Hop");
-                        }
-                        if(HipHopBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                            HipHopBot.misc.ready = false;
-                            setTimeout(function(){ HipHopBot.misc.ready = true; }, HipHopBot.settings.cooldown * 1000);
                         }
                         break;
-               
-                    case "commands":
-                        if(typeof command[1] == "undefined"){
-                            API.sendChat("My commands can be found here: http://goo.gl/rzCrcL");
-                        }else if(command[1].indexOf("@") > -1){
-                            API.sendChat(command[1]+" My commands can be found here: http://goo.gl/rzCrcL");
-                        }else{
-                            API.sendChat("My commands can be found here: http://goo.gl/rzCrcL");
-                        }
-                        if(HipHopBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                            HipHopBot.misc.ready = false;
-                            setTimeout(function(){ HipHopBot.misc.ready = true; }, HipHopBot.settings.cooldown * 1000);
+                        
+                case "props":
+                case "bonus":
+                        if(HipHopBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission < 2){
+                        API.sendChat(data.from +" just gave props to @"+ API.getDJ().username +" for playing a dope track!");
                         }
                         break;
- 
-                   case "issue":
-                        if(typeof command[1] == "undefined"){
-                            API.sendChat("You think i have issues? : http://goo.gl/LVVapN");
-                        }else if(command[1].indexOf("@") > -1){
-                            API.sendChat(command[1]+" You think i have issues? : http://goo.gl/LVVapN");
-                        }else{
-                            API.sendChat("You think i have issues? : http://goo.gl/LVVapN");
-                        }
-                        if(HipHopBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                            HipHopBot.misc.ready = false;
-                            setTimeout(function(){ HipHopBot.misc.ready = true; }, HipHopBot.settings.cooldown * 1000);
-                        }
-                        break;
- 
-                    case "contact":
-                        if(typeof command[1] == "undefined"){
-                            API.sendChat("You can contact my admins here : http://goo.gl/hnajX8");
-                        }else if(command[1].indexOf("@") > -1){
-                            API.sendChat(command[1]+" You can contact my admins here : http://goo.gl/hnajX8");
-                        }else{
-                            API.sendChat("You can contact my admins here : http://goo.gl/hnajX8");
-                        }
-                        if(HipHopBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                            HipHopBot.misc.ready = false;
-                            setTimeout(function(){ HipHopBot.misc.ready = true; }, HipHopBot.settings.cooldown * 1000);
-                        }
-                        break;
- 
-                    case "installs":
-                        if(typeof command[1] == "undefined"){
-                            API.sendChat("You can install our new theme script here: http://goo.gl/LVSfOA");
-                        }else if(command[1].indexOf("@") > -1){
-                            API.sendChat(command[1]+" You can install our new theme script here: http://goo.gl/LVSfOA");
-                        }else{
-                            API.sendChat("You can install our new theme script here: http://goo.gl/LVSfOA");
-                        }
-                        if(HipHopBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                            HipHopBot.misc.ready = false;
-                            setTimeout(function(){ HipHopBot.misc.ready = true; }, HipHopBot.settings.cooldown * 1000);
-                        }
-                        break;
-                       
-                    case "whywoot":
-                        if(typeof command[1] == "undefined"){
+                
+                case "whywoot":
+                        if(HipHopBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission < 2){
                             API.sendChat("Plug gives you 1 point for wooting the current song if you don't like the song i suggest you remain neutral");
                         }else if(command[1].indexOf("@") > -1){
                             API.sendChat(command[1]+" Plug gives you 1 point for wooting the current song if you don't like the song i suggest you remain neutral");
                         }else{
                             API.sendChat("Plug gives you 1 point for wooting the current song if you don't like the song i suggest you remain neutral");
                         }
-                        if(HipHopBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                            HipHopBot.misc.ready = false;
-                            setTimeout(function(){ HipHopBot.misc.ready = true; }, HipHopBot.settings.cooldown * 1000);
-                        }
                         break;
  
-                    case "props":
-                    case "bonus":
-                        if(typeof command[1] == "undefined"){
-                        API.sendChat("@"+ data.from +" just gave props to @"+ API.getDJ().username +" for playing a dope track!");
-                        }
-                        break;
- 
-                    case "whymeh":
-                        if(typeof command[1] == "undefined"){
+                case "whymeh":
+                        if(HipHopBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission < 2){
                             API.sendChat("Reserve Mehs for songs that are a) extremely overplayed b) off genre c) absolutely god awful or d) troll songs. ");
                         }else if(command[1].indexOf("@") > -1){
                             API.sendChat(command[1]+" Reserve Mehs for songs that are a) extremely overplayed b) off genre c) absolutely god awful or d) troll songs. ");
                         }else{
                             API.sendChat("Reserve Mehs for songs that are a) extremely overplayed b) off genre c) absolutely god awful or d) troll songs. ");
                         }
-                        if(HipHopBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                            HipHopBot.misc.ready = false;
-                            setTimeout(function(){ HipHopBot.misc.ready = true; }, HipHopBot.settings.cooldown * 1000);
-                        }
                         break;
- 
-                    case "help":
-                        if(typeof command[1] == "undefined"){
-                            API.sendChat("Welcome to the Hip Hop Turntable! Create a playlist and populate it with songs from either YouTube or Soundcloud. Click the 'Join Waitlist' button and wait your turn to play music. Most Hip Hip music allowed.");
+                        
+                case "help":
+                        if(HipHopBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission < 2){
+                            API.sendChat("Greetings! Create a playlist and populate it with songs from either YouTube or Soundcloud. Click the 'Join Waitlist' button and wait your turn to play music.");
                                 setTimeout(function(){
                             API.sendChat("Ask a mod if you're unsure about your song choice.");
                          }, 650);
                         }else if(command[1].indexOf("@") > -1){
-                            API.sendChat(command[1]+ "Welcome to the Dubstep Den! Create a playlist and populate it with songs from either YouTube or Soundcloud. Click the 'Join Waitlist' button and wait your turn to play music. Most Hip Hop music is allowed.");
+                            API.sendChat(command[1]+ "Greetings! Create a playlist and populate it with songs from either YouTube or Soundcloud. Click the 'Join Waitlist' button and wait your turn to play music.");
                                 setTimeout(function(){
                             API.sendChat("Ask a mod if you're unsure about your song choice.");
                          }, 650);
                         }
-                        if(HipHopBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                            HipHopBot.misc.ready = false;
-                            setTimeout(function(){ HipHopBot.misc.ready = true; }, HipHopBot.settings.cooldown * 1000);
+                        break;
+                    
+                 case "define":
+                        if(HipHopBot.admins.indexOf(fromID) !== -1 || API.getUser(fromID).permission < 2){
+                            API.sendChat("@" + data.from + " Define what?!");
+                        }else if(command[1].toLowerCase().indexOf("xxx") === -1 && command[1].toLowerCase().indexOf("porn") === -1 && command[1].toLowerCase().indexOf("sex") === -1){
+                            API.sendChat("@"+ data.from +" http://www.urbandictionary.com/define.php?term="+command[1]);
+                        }else{
+                        var idiotMsg = ["Dude wtf is wrong with you search that up yourself.","You sound stupid yo","What do i look like a porn bot?","What are you an idiot?"];
+                            API.sendChat("@"+ data.from +" "+ idiotMsg[Math.floor(Math.random() * idiotMsg.length)]);
                         }
                         break;
- 
-                    case "wiki":
-                        if(typeof command[1] == "undefined"){
+                
+                case "wiki":
+                        if(HipHopBot.admins.indexOf(fromID) !== -1 || API.getUser(fromID).permission < 2){
                             API.sendChat("@"+data.from+" https://en.wikipedia.org/wiki/Special:Random");
                         }else{
                             var r = data.message.substring(6).replace(g, "_");
@@ -615,42 +565,20 @@ botMethods.djAdvanceEvent = function(data){
                                 }
                             );
                         }
-                        if(HipHopBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                            HipHopBot.misc.ready = false;
-                            setTimeout(function(){ HipHopBot.misc.ready = true; }, HipHopBot.settings.cooldown * 1000);
-                        }
                         break;
  
-                    case "link":
-                        if(typeof command[1] == "undefined"){
+                 case "link":
+                        if(HipHopBot.admins.indexOf(fromID) !== -1 || API.getUser(fromID).permission < 2){
                             API.sendChat("@" + data.from + " Put a link starting off from www.");
                         }else if(command[1].toLowerCase().indexOf("plug.dj") === -1 && command[1].toLowerCase().indexOf("bug.dj") === -1 && command[1].toLowerCase().indexOf("porn") === -1 && command[1].toLowerCase().indexOf("sex") === -1){
                             API.sendChat("http://"+command[1]);
                         }else{
                             API.sendChat("@"+ data.from +" What are you an idiot?");
                         }
-                        if(HipHopBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                            HipHopBot.misc.ready = false;
-                            setTimeout(function(){ HipHopBot.misc.ready = true; }, HipHopBot.settings.cooldown * 1000);
-                        }
                         break;
- 
-                    case "define":
-                        if(typeof command[1] == "undefined"){
-                            API.sendChat("@" + data.from + " Define what?!");
-                        }else if(command[1].toLowerCase().indexOf("xxx") === -1 && command[1].toLowerCase().indexOf("porn") === -1 && command[1].toLowerCase().indexOf("sex") === -1){
-                            API.sendChat("@"+ data.from +" http://www.urbandictionary.com/define.php?term="+command[1]);
-                        }else{
-                            API.sendChat("@"+ data.from +" What are you an idiot?");
-                        }
-                        if(HipHopBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                            HipHopBot.misc.ready = false;
-                            setTimeout(function(){ HipHopBot.misc.ready = true; }, HipHopBot.settings.cooldown * 1000);
-                        }
-                        break;
- 
-                    case "songlink":
-                        if(API.getMedia().format == 1){
+                
+                case "songlink":
+                        if(HipHopBot.admins.indexOf(fromID) !== -1 || API.getUser(fromID).permission < 2 || API.getMedia().format == 1){
                             API.sendChat("@" + data.from + " " + "http://youtu.be/" + API.getMedia().cid);
                         }else{
                             var id = API.getMedia().cid;
@@ -658,34 +586,26 @@ botMethods.djAdvanceEvent = function(data){
                                 API.sendChat("@"+data.from+" "+tracks[0].permalink_url);
                             });
                         }
-                        if(HipHopBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                            HipHopBot.misc.ready = false;
-                            setTimeout(function(){ HipHopBot.misc.ready = true; }, HipHopBot.settings.cooldown * 1000);
-                        }
                         break;
  
-                    case "download":
-                        if(typeof command[1] == "undefined"){
+                case "download":
+                        if(HipHopBot.admins.indexOf(fromID) !== -1 || API.getUser(fromID).permission < 2){
                             API.sendChat("Download your song free here: http://www.vebsi.com/");
                         }else if(command[1].indexOf("@") > -1){
                             API.sendChat(command[1]+" Download your song free here: http://www.vebsi.com/");
                         }else{
                             API.sendChat("Download your song free here: http://www.vebsi.com/");
                         }
-                        if(HipHopBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                            HipHopBot.misc.ready = false;
-                            setTimeout(function(){ HipHopBot.misc.ready = true; }, HipHopBot.settings.cooldown * 1000);
-                        }
                         break;
- 
                 }
             }
         }
     });
  
-        API.on(API.CHAT, function(data){
+    API.on(API.CHAT, function(data){
         if(data.message.indexOf('!') === 0){
             var msg = data.message, from = data.from, fromID = data.fromID;
+            var id = data.fromID;var msg = data.message;var userfrom = data.from;
             var command = msg.substring(1).split(' ');
             if(typeof command[2] != "undefined"){
                 for(var i = 2; i<command.length; i++){
@@ -694,37 +614,196 @@ botMethods.djAdvanceEvent = function(data){
             }
             if(HipHopBot.misc.ready || HipHopBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
                 switch(command[0].toLowerCase()){
- 
-                    case "add":
-                    if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
-                    $(".icon-curate").click();
-                    $($(".curate").children(".menu").children().children()[0]).mousedown();
-                }
-                        break;
- 
-                    case "say":
-                    if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
-                        if(typeof command[1] === "undefined"){
+                
+                case "test":
+                        if(HipHopBot.admins.indexOf(fromID) > -1){
+                            API.sendChat("@"+ data.from +" Test Successful");
                             }else{
-                            API.sendChat(command[1]);
+                            API.sendChat("This command requires Admins only!");
                         }
-                    }
                         break;
- 
-                    case "skip":
-                    if(API.getUser(data.fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                        
+                case "ping":
+                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                            API.sendChat("@"+ data.from +" Pong!");
+                            }else{
+                            API.sendChat("This command requires staff members only!");
+                        }
+                        break;
+                        
+                case "marco":
+                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                            API.sendChat("@"+ data.from +" Polo!");
+                            }else{
+                            API.sendChat("This command requires staff members only!");
+                        }
+                        break;        
+                        
+                case "skip":
+                       if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                            HipHopBot.skip();
+                        }else{
+                           API.sendChat("This command requires staff members only!");
+                        }
+                        break;
+                        
+                case "unlock":
+                       if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                            API.moderateLockWaitList(false);
+                        }else{
+                           API.sendChat("This command requires staff members only!");
+                        }
+                        break;
+                        
+                case "say":
+                        if(API.getUser(fromID).permission > 1 || Funbot.admins.indexOf(fromID) > -1 || typeof command[1] === "undefined"){
+                           API.sendChat(command[1]);
+                        }else{
+                         API.sendChat("This command requires staff members only!");
+                        }
+                        break;
+                        
+                case "add":
+                        if(API.getUser(fromID).permission < 2 || HipHopBot.admins.indexOf(fromID) > -1){
+                            API.moderateAddDJ(data.fromID);
+                        }
+                        break;
+                        
+                case "remove":
+                        if(API.getUser(fromID).permission < 2 || HipHopBot.admins.indexOf(fromID) > -1){
+                            API.moderateRemoveDJ(data.fromID);
+                        }
+                        break;
+                        
+                case "ban":
+                       if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                            var username = msg.substr(msg.indexOf('@')+1);
+                            var userid = getUserID(username);
+                            API.moderateBanUser(userid, 0, API.BAN.HOUR);
+                        }else{
+                            API.sendChat("This command requires staff members only!");
+                        }
+                        break;
+                        
+                case "queup":
+                       if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                            var username = msg.substr(msg.indexOf('@')+1);
+                            var userid = getUserID(username);
+                            API.moderateAddDJ(userid);
+                        }else{
+                            API.sendChat("This command requires staff members only!");
+                        }
+                        break;
+                        
+                case "quedown":
+                       if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                            var username = msg.substr(msg.indexOf('@')+1);
+                            var userid = getUserID(username);
+                            API.moderateRemoveDJ(userid);
+                        }else{
+                            API.sendChat("This command requires staff members only!");
+                        }
+                        break;
+                        
+                case "lock":
+                       if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                            API.moderateLockWaitList(true);
+                        }else{
+                           API.sendChat("This command requires staff members only!");
+                        }
+                        break;         
+                        
+                case "lockskip":
+                       if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                            API.moderateLockWaitList(true);
+                            setTimeout("HipHopBot.skip();", 100);
+                            setTimeout("API.moderateLockWaitList(false);", 700);
+                        }else{
+                            API.sendChat("This command requires staff members only!");
+                        }
+                        break;
+                
+                case "woot":
+                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
                         if(typeof command[1] === "undefined"){
-                            API.moderateForceSkip();
+                           API.sendChat("One woot coming up!");
+                        setTimeout(function(){
+                           document.getElementById("woot").click()
+                        }, 650);
+                        }
                         }else{
                            API.sendChat("This command requires bouncer +");
                         }
-                    }
+                        break;
+ 
+                case "meh":
+                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                        if(typeof command[1] === "undefined"){
+                           API.sendChat("Bummer, A meh has been requested!!");
+                        setTimeout(function(){
+                           document.getElementById("meh").click()
+                        }, 650);
+                        }
+                        }else{
+                           API.sendChat("This command requires bouncer +");
+                        }
                         break;
                         
-                    case "reload":
-                    if(API.getUser(data.fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
-                        if(typeof command[1] === "undefined"){
-                           API.sendChat("Now reloading HipHop Bot script...")
+                case "join":
+                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                        setTimeout(function(){
+                        var joindj = ["[user] Time to spin a track! :speaker:","[user] Seems like i'm up!","[user] Now joinning the booth"];
+                        r = Math.floor(Math.random() * joindj.length);
+                            API.sendChat(joindj[r].replace("user", data.from));
+                            API.djJoin();
+                        }, 100);
+                        }else{
+                           API.sendChat("This command requires bouncer +");
+                        }
+                        break;
+ 
+                case "leave":
+                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                        setTimeout(function(){
+                        var leavedj = ["[user] Now leaving the dj booth...","[user] Kicking me off :(","[user] Made a pic for you! http://i.imgur.com/4uVDb6f.gif  ....Loser"];
+                        r = Math.floor(Math.random() * leavedj.length);
+                            API.sendChat(leavedj[r].replace("user", data.from));
+                            API.djLeave();
+                        }, 100);
+                        }else {
+                           API.sendChat("This command requires bouncer +");
+                        }
+                        break;
+ 
+                case "votes":
+                        if(API.getUser(fromID).permission < 2 || API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                        API.sendChat("Users vote:  :+1: " + API.getRoomScore().positive + " | :-1: " + API.getRoomScore().negative + " | :purple_heart: " + API.getRoomScore().curates);
+                            HipHopBot.misc.ready = false;
+                            setTimeout(function(){ HipHopBot.misc.ready = true; }, HipHopBot.settings.cooldown * 1000);
+                        }
+                        break;
+                        
+                case "version":
+                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                        API.sendChat("Bot Version "+ HipHopBot.misc.version);
+                            HipHopBot.misc.ready = false;
+                            setTimeout(function(){ HipHopBot.misc.ready = true; }, HipHopBot.settings.cooldown * 1000);
+                        }else {
+                           API.sendChat("This command requires bouncer +");
+                        }
+                        break;
+                        
+                case "source":
+                       if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                            API.sendChat("๖ۣۜĐل - ɴᴇᴏɴ - TFL wrote me at github which is available here: http://goo.gl/iLRyWJ");
+                            HipHopBot.misc.ready = false;
+                            setTimeout(function(){ HipHopBot.misc.ready = true; }, HipHopBot.settings.cooldown * 1000);
+                        }
+                        break;
+                        
+                case "reload":
+                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                           API.sendChat("Now reloading script...");
                         setTimeout(function(){
                            HipHopBot.unhook();
                         }, 150);
@@ -734,10 +813,9 @@ botMethods.djAdvanceEvent = function(data){
                         }else{
                            API.sendChat("This command requires bouncer +");
                         }
-                    }
                         break;
                         
-                    case "die":
+                case "die":
                         if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
                            API.sendChat('Unhooking Events...');
                         setTimeout(function(){
@@ -745,7 +823,7 @@ botMethods.djAdvanceEvent = function(data){
                         }, 150);
                         setTimeout(function(){
                            API.sendChat('Consider me dead');
-                        }, 475);
+                        }, 750);
                         setTimeout(function(){
                            HipHopBot.unhook();
                         }, 700);
@@ -753,208 +831,9 @@ botMethods.djAdvanceEvent = function(data){
                            API.sendChat("This command requires bouncer +");
                         }
                         break;
- 
-                    case "unlock":
-                        if(HipHopBot.admins.indexOf(fromID) > -1){
-                        if(typeof command[1] === "undefined"){
-                            API.moderateLockWaitList(false);
-                        }
-                    }
-                        break;
-               
-                    case "lock":
-                        if(HipHopBot.admins.indexOf(fromID) > -1){
-                        if(typeof command[1] === "undefined"){
-                            API.moderateLockWaitList(true);
-                        }
-                    }
-                        break;
- 
-                    case "meh":
-                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
-                           API.sendChat("Bummer, A meh has been requested!!");
-                        setTimeout(function(){
-                           document.getElementById("meh").click()
-                        }, 650);
-                        }else{
-                           API.sendChat("This command requires bouncer +");
-                    }
-                        break;
- 
-                    case "woot":
-                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
-                           API.sendChat("One woot coming up!");
-                        setTimeout(function(){
-                           document.getElementById("woot").click()
-                        }, 650);
-                        }else {
-                           API.sendChat("This command requires bouncer +");
-                     }
-                        break;
-                   
-                    case "join":
-                    case "stepup":
-                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
-                        if(typeof command[1] === "undefined"){
-                            API.djJoin();
-                        }
-                    }
-                        break;
- 
-                    case "leave":
-                    case "down":
-                    case "dive":
-                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
-                        if(typeof command[1] === "undefined"){
-                            API.djLeave();
-                        }
-                    }
-                        break;
                         
-                    case "lockskip":
-                        if(HipHopBot.admins.indexOf(fromID) > -1){
-                            API.moderateLockWaitList(true);
-                            API.moderateForceSkip();
-                        setTimeout(function(){
-                           API.moderateLockWaitList(false);
-                        }, 650);
-                        }else{
-                            API.sendChat("This command requires Admins only!");
-                        }
-                        break;
- 
-                    case "test":
-                        if(HipHopBot.admins.indexOf(fromID) > -1){
-                            API.sendChat("@"+ data.from +" Test Successful");
-                            }else{
-                            API.sendChat("This command requires Admins only!");
-                        }
-                        break;
- 
-                    case "source":
-                        if(HipHopBot.admins.indexOf(fromID) > -1){
-                            API.sendChat("Sup Admin "+ data.from +"! My source is located here: http://goo.gl/VjPC3N");
-                            }else{
-                            API.sendChat("This command requires Admins only!");
-                        }
-                        break;
- 
-                    case "historyfilter":
-                    case "hf":
-                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1) HipHopBot.settings.historyFilter ? API.sendChat("History filter is enabled") : API.sendChat("History filter is disabled");
-                        botMethods.save();
-                        break;
- 
-                    case "swearfilter":
-                    case "sf":
-                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1) HipHopBot.settings.swearFilter ? API.sendChat("Swearing filter is enabled") : API.sendChat("Swearing filter is disabled");
-                        botMethods.save();
-                        break;
- 
-                    case "commandfilter":
-                    case "cf":
-                        if(HipHopBot.admins.indexOf(fromID) > -1) HipHopBot.settings.commandFilter ? API.sendChat("Commands filter is enabled") : API.sendChat("Commands filter is disabled");
-                        botMethods.save();
-                        break;
- 
-                    case "racismfilter":
-                    case "rf":
-                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1) HipHopBot.settings.racismFilter ? API.sendChat("Racism filter is enabled") : API.sendChat("Racism filter is disabled");
-                        botMethods.save();
-                        break;
- 
-                    case "beggerfilter":
-                    case "bf":
-                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1) HipHopBot.settings.beggerFilter ? API.sendChat("Begger filter is enabled") : API.sendChat("Begger filter is disabled");
-                        botMethods.save();
-                        break;
- 
-                    case "tsf":
-                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
-                            if(HipHopBot.settings.swearFilter){
-                                HipHopBot.settings.swearFilter = false;
-                                API.sendChat("Bot will no longer filter swearing.");
-                            }else{
-                                HipHopBot.settings.swearFilter = true;
-                                API.sendChat("Bot will now filter swearing.");
-                            }
-                        }
-                        botMethods.save();
-                        break;
-       
-                    case "tcf":
-                        if(HipHopBot.admins.indexOf(fromID) > -1){
-                            if(HipHopBot.settings.commandFilter){
-                                HipHopBot.settings.commandFilter = false;
-                                API.sendChat("Bot will no longer filter commands.");
-                            }else{
-                                HipHopBot.settings.commandFilter = true;
-                                API.sendChat("Bot will now filter commands.");
-                            }
-                        }
-                        botMethods.save();
-                        break;
- 
-                    case "trf":
-                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
-                            if(HipHopBot.settings.racismFilter){
-                                HipHopBot.settings.racismFilter = false;
-                                API.sendChat("Bot will no longer filter racism.");
-                            }else{
-                                HipHopBot.settings.racismFilter = true;
-                                API.sendChat("Bot will now filter racism.");
-                            }
-                        }
-                        botMethods.save();
-                        break;
- 
-                    case "tbf":
-                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
-                            if(HipHopBot.settings.beggerFilter){
-                                HipHopBot.settings.beggerFilter = false;
-                                API.sendChat("Bot will no longer filter fan begging.");
-                            }else{
-                                HipHopBot.settings.beggerFilter = true;
-                                API.sendChat("Bot will now filter fan begging.");
-                            }
-                        }
-                        botMethods.save();
-                        break;
- 
-                    case "thf":
-                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
-                            if(HipHopBot.settings.historyFilter){
-                                HipHopBot.settings.historyFilter = false;!
-                                    API.sendChat("Bot will no longer skip songs that are in the room history.");
-                            }else{
-                                HipHopBot.settings.historyFilter = true;
-                                API.sendChat("Bot will now skip songs that are in the room history.");
-                            }
-                        }
-                        botMethods.save();
-                        break;
-                 
-                    case "version":
-                        if(HipHopBot.admins.indexOf(fromID) > -1){
-                            API.sendChat("HipHop-Script version " + HipHopBot.misc.version);
-                            }else{
-                                API.sendChat("This command requires Admins only!");
-                            }
-                        break;
- 
-                    case "origin":
-                    case "author":
-                    case "authors":
-                    case "creator":
-                        if(HipHopBot.admins.indexOf(fromID) == -1 || API.getUser(fromID).permission < 2){
-                           API.sendChat(HipHopBot.misc.origin);
-                            HipHopBot.misc.ready = false;
-                            setTimeout(function(){ HipHopBot.misc.ready = true; }, HipHopBot.settings.cooldown * 1000);
-                        }
-                        break;
- 
-                    case "status":
-                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                case "status":
+                        if(API.getUser(fromID).permission > 1 || Funbot.admins.indexOf(fromID) > -1){
                             var response = "";
                             var currentTime = new Date().getTime();
                             var minutes = Math.floor((currentTime - joined) / 60000);
@@ -964,143 +843,59 @@ botMethods.djAdvanceEvent = function(data){
                                 hours++;
                             }
                             hours == 0 ? response = "Running for " + minutes + "m " : response = "Running for " + hours + "h " + minutes + "m";
-                            response = response + " | Begger filter: "+HipHopBot.settings.beggerFilter;
-                            response = response + " | Swear filter: "+HipHopBot.settings.swearFilter;
-                            response = response + " | Command filter: "+HipHopBot.settings.commandFilter;
-                            response = response + " | Racism filter: "+HipHopBot.settings.racismFilter;
-                            response = response + " | History filter: "+HipHopBot.settings.historyFilter;
-                            response = response + " | MaxLength: " + HipHopBot.settings.maxLength + "m";
-                            response = response + " | Cooldown: " + HipHopBot.settings.cooldown + "s";
-                            response = response + " | Removed Video Filter: "+ HipHopBot.settings.removedFilter;
+                            response = response + " | Begger filter: "+ Funbot.settings.beggerFilter;
+                            response = response + " | SongLimit: " + Funbot.settings.songLimit + "m";
+                            response = response + " | Cooldown: " + Funbot.settings.cooldown + "s";
+                            response = response + " | CPU Filter: "+ Funbot.settings.removedFilter;
                             API.sendChat(response);
+                        }else {
+                           API.sendChat("This command requires bouncer +");
                         }
                         break;
- 
-                    case "cooldown":
-                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
-                            if(typeof command[1] == "undefined"){
-                                if(HipHopBot.settings.cooldown != 0.0001){
-                                    API.sendChat('Cooldown is '+HipHopBot.settings.cooldown+' seconds');
-                                }else{
-                                    API.sendChat('Cooldown is disabled');
-                                }
-                            }else if(command[1] == "disable"){
-                                HipHopBot.settings.cooldown = 0.0001;
-                                API.sendChat('Cooldown disabled');
-                            }else{
-                                HipHopBot.settings.cooldown = command[1];
-                                API.sendChat('New cooldown is '+HipHopBot.settings.cooldown+' seconds');
-                            }
-                        }
+                
+                case "beggerfilter":
+                case "bf":
+                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1) HipHopBot.settings.beggerFilter ? API.sendChat("Begger filter is enabled") : API.sendChat("Begger filter is disabled");
                         botMethods.save();
                         break;
- 
-                    case "maxlength":
+                        
+                case "commandfilter":
+                case "cf":
+                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1) HipHopBot.settings.commandFilter ? API.sendChat("Commands filter is enabled") : API.sendChat("Commands filter is disabled");
+                        botMethods.save();
+                        break;    
+                
+                case "tbf":
                         if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
-                            if(typeof command[1] == "undefined"){
-                                if(HipHopBot.settings.maxLength != 1e+50){
-                                    API.sendChat('Maxlength is '+HipHopBot.settings.maxLength+' minutes');
-                                }else{
-                                    API.sendChat('Maxlength is disabled');
-                                }
-                            }else if(command[1] == "disable"){
-                                HipHopBot.settings.maxLength = Infinity;
-                                API.sendChat('Maxlength disabled');
+                        if(HipHopBot.settings.beggerFilter){
+                                HipHopBot.settings.beggerFilter = false;
+                                API.sendChat("Bot will no longer filter fan begging.");
                             }else{
-                                HipHopBot.settings.maxLength = command[1];
-                                API.sendChat('New maxlength is '+HipHopBot.settings.maxLength+' minutes');
+                                HipHopBot.settings.beggerFilter = true;
+                                API.sendChat("Bot will now filter fan begging.");
                             }
                         }
-                        botMethods.save();
                         break;
- 
-                    case "interactive":
+                        
+                case "tcf":
                         if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
-                            HipHopBot.settings.interactive ? API.sendChat("Bot is interactive.") : API.sendChat("Bot is not interactive.");
-                        }
-                        break;
- 
-                    case "toggleinteractive":
-                    case "ti":
-                        if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
-                            if(HipHopBot.settings.interactive){
-                                HipHopBot.settings.interactive = false;
-                                API.sendChat("Bot will no longer interact.");
+                        if(HipHopBot.settings.commandFilter){
+                                HipHopBot.settings.commandFilter = false;
+                                API.sendChat("Bot will no longer filter commands.");
                             }else{
-                                HipHopBot.settings.interactive = true;
-                                API.sendChat("Bot will now interact.");
+                                HipHopBot.settings.commandFilter = true;
+                                API.sendChat("Bot will now filter commands.");
                             }
                         }
-                        botMethods.save();
                         break;
- 
-                    case "save":
-                        if(HipHopBot.admins.indexOf(fromID) > -1){
-                            botMethods.save();
-                            API.sendChat("Settings saved.");
-                        }else{
-                             API.sendChat("This command requires Admins only!");
-                        }
-                        break;
- 
-                    case "stfu":
-                        if(HipHopBot.admins.indexOf(fromID) > -1){
-                            API.sendChat("Yessir!");
-                        }else{
-                             API.sendChat("No you stfu Faggot!");
-                        }
-                        break;
- 
-                    case "changelog":
-                        if(HipHopBot.admins.indexOf(fromID) > -1){
-                            API.sendChat("New in version " + HipHopBot.misc.version + " - " + HipHopBot.misc.changelog)
-                        }else{
-                             API.sendChat("This command requires Admins only!");
-                        }
-                        break;
- 
+                
                 }
             }
         }
     });
- 
+    
     API.on(API.CHAT, function(data){
-        if(data.message.indexOf('!rule ') === 0){
-            var msg = data.message, from = data.from, fromID = data.fromID;
-            var command = msg.substring(1).split(' ');
-        if(HipHopBot.misc.ready || HipHopBot.admins.indexOf(fromID) > -1 ||API.getUser(fromID).permission > 1){
-                switch(command[1]){
-                    case '1':
-                        API.sendChat("Play mostly hip hop.");
-                        break;
-                    case '2':
-                        API.sendChat("Avoid mainstream hip hop.");
-                        break;
-                    case '3':
-                        API.sendChat("Trolls well be force to be booted.");
-                        break;
-                    case '4':
-                        API.sendChat("No auto join.");
-                        break;
-                    case '5':
-                        API.sendChat("No songs over "+ HipHopBot.settings.maxLength +" minutes.");
-                        break;
-                    case '6':
-                        API.sendChat("No swag hip-pop.");
-                        break;
-                    case '7':
-                        API.sendChat("Woot while on waitlist.");
-                        break;
-                    default:
-                        API.sendChat("You faggot that's an Unknown rule!");
-                        break;
-                }
-            }
-        }
-    });
-   
-        API.on(API.CHAT, function(data){
-        if(data.message.indexOf('!') === 0){
+            if(data.message.indexOf('!') === 0){
             var msg = data.message, from = data.from, fromID = data.fromID;
             var command = msg.substring(1).split(' ');
             if(typeof command[2] != "undefined"){
@@ -1282,8 +1077,8 @@ botMethods.djAdvanceEvent = function(data){
                         break;
  
  
-                    case "cookie":
-                    case "reward":
+                 case "cookie":
+                 case "reward":
                         if(typeof command[1] == "@"){
                             var crowd = API.getUsers();
                             var randomUser = Math.floor(Math.random() * crowd.length);
@@ -1317,7 +1112,7 @@ botMethods.djAdvanceEvent = function(data){
                         break;
                        
                        
-                     case "weed":
+                 case "weed":
                         if(typeof command[1] == "@"){
                             var crowd = API.getUsers();
                             var randomUser = Math.floor(Math.random() * crowd.length);
@@ -1356,7 +1151,7 @@ botMethods.djAdvanceEvent = function(data){
                         }
                         break;  
                        
-                    case "hug":
+                  case "hug":
                         if(typeof command[1] == "@"){
                             var crowd = API.getUsers();
                             var randomUser = Math.floor(Math.random() * crowd.length);
@@ -1401,7 +1196,7 @@ botMethods.djAdvanceEvent = function(data){
                         }
                         break;
                        
-                     case "beer":
+                  case "beer":
                         if(typeof command[1] == "@"){
                             var crowd = API.getUsers();
                             var randomUser = Math.floor(Math.random() * crowd.length);
@@ -1447,7 +1242,7 @@ botMethods.djAdvanceEvent = function(data){
                         break;  
                        
  
-                     case "dogfact":
+                  case "dogfact":
                         if(typeof command[1] == "undefined"){
                             var crowd = API.getUsers();
                             var randomUser = Math.floor(Math.random() * crowd.length);
@@ -1480,7 +1275,7 @@ botMethods.djAdvanceEvent = function(data){
                         }
                         break;
                        
-                    case "catfact":
+                 case "catfact":
                         if(typeof command[1] == "undefined"){
                             var crowd = API.getUsers();
                             var randomUser = Math.floor(Math.random() * crowd.length);
@@ -1516,22 +1311,74 @@ botMethods.djAdvanceEvent = function(data){
             }
         }
     });
+    
+    API.on(API.CHAT, function(data){
+        if(data.message.indexOf('.set ') === 0){
+            var msg = data.message, from = data.from, fromID = data.fromID;
+            var id = data.fromID;var msg = data.message;var userfrom = data.from;
+            var command = msg.substring(1).split(' ');
+
+            if(HipHopBot.misc.ready || HipHopBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission > 1){
+                switch(command[1]){
+                    
+                    case 'resident':
+                       if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                         var username = msg.substr(msg.indexOf('@')+1);
+                         var userid = getUserID(username);
+                            API.moderateSetRole(userid, API.ROLE.RESIDENTDJ);
+                        }else{
+                            API.sendChat("This command requires staff members only!");
+                        }
+                        break;
+                    case 'bouncer':
+                       if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                        var username = msg.substr(msg.indexOf('@')+1);
+                        var userid = getUserID(username);
+                            API.moderateSetRole(userid, API.ROLE.BOUNCER);
+                        }else{
+                            API.sendChat("This command requires staff members only!");
+                        }
+                        break;
+                    case 'manager':
+                       if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                        var username = msg.substr(msg.indexOf('@')+1);
+                        var userid = getUserID(username);
+                            API.moderateSetRole(userid, API.ROLE.MANAGER);
+                        }else{
+                            API.sendChat("This command requires staff members only!");
+                        }
+                        break;
+                    case 'cohost':
+                       if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                        var username = msg.substr(msg.indexOf('@')+1);
+                        var userid = getUserID(username);
+                            API.moderateSetRole(userid, API.ROLE.COHOST);
+                        }else{
+                            API.sendChat("This command requires staff members only!");
+                        }
+                        break;
+                    case 'host':
+                       if(API.getUser(fromID).permission > 1 || HipHopBot.admins.indexOf(fromID) > -1){
+                        var username = msg.substr(msg.indexOf('@')+1);
+                        var userid = getUserID(username);
+                            API.moderateSetRole(userid, API.ROLE.HOST);
+                        }else{
+                            API.sendChat("This command requires staff members only!");
+                        }
+                        break;
+                    default:
+                        API.sendChat("Can't set user to that variation!");
+                        break;
+                }
+            }
+        }
+    });
  
     API.on(API.CHAT, function(data){
         msg = data.message.toLowerCase(), chatID = data.chatID;
  
         for(var i = 0; i < HipHopBot.filters.swearWords.length; i++){
             if(msg.indexOf(HipHopBot.filters.swearWords[i].toLowerCase()) > -1 && HipHopBot.settings.swearFilter){
-                API.moderateDeleteChat(chatID);
-            }
-        }
-        for(var i = 0; i < HipHopBot.filters.commandWords.length; i++){
-            if(msg.indexOf(HipHopBot.filters.commandWords[i].toLowerCase()) > -1 && HipHopBot.settings.commandFilter){
-                API.moderateDeleteChat(chatID);
-            }
-        }
-        for(var i = 0; i < HipHopBot.filters.racistWords.length; i++){
-            if(msg.indexOf(HipHopBot.filters.racistWords[i].toLowerCase()) > -1 && HipHopBot.settings.racismFilter){
                 API.moderateDeleteChat(chatID);
             }
         }
@@ -1578,7 +1425,7 @@ botMethods.djAdvanceEvent = function(data){
         $.getJSON('http://gdata.youtube.com/feeds/api/videos/'+data.media.cid+'?v=2&alt=jsonc&callback=?', function(json){response = json.data});
         setTimeout(function(){
             if(typeof response === 'undefined' && data.media.format != 2 && HipHopBot.settings.removedFilter){
-                API.sendChat('/me This video may be unavailable!!');
+                API.sendChat("This video is unavailable!");
                 //botMethods.skip();
             }
         }, 1500);
@@ -1586,9 +1433,8 @@ botMethods.djAdvanceEvent = function(data){
         cancel = false;
     }
  
- 
     botMethods.loadStorage();
-    console.log("HipHop-Script version " + HipHopBot.misc.version);
+    console.log("HipHop-Script version "+ HipHopBot.misc.version);
  
     setTimeout(function(){
         $.getScript('http://goo.gl/OZQv0m');
@@ -1600,7 +1446,7 @@ botMethods.djAdvanceEvent = function(data){
         });
     }, 3000);
  
-    API.sendChat('HipHop-Script v'+HipHopBot.misc.version+' Reporting for duty!');
+    API.sendChat("HH-Bot Version "+ HipHopBot.misc.version+" now activated!");
    }else{
    API.sendChat("This bot cannot work in this lobby! Now alerting socket!");
    };
