@@ -496,7 +496,7 @@ botMethods.djAdvanceEvent = function(data){
                         
                 case "props":
                 case "bonus":
-                        if(HipHopBot.admins.indexOf(fromID) > -1 || API.getUser(fromID).permission < 2){
+                        if(typeof command[1] == "undefined"){
                         API.sendChat(data.from +" just gave props to @"+ API.getDJ().username +" for playing a dope track!");
                         }
                         break;
